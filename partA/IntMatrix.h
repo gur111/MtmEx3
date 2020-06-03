@@ -37,4 +37,4 @@ namespace mtm {
 
 }
 
-#endif //MTMEX3_INTMATRIX_H
+#endif // MTMEX3_INTMATRIX_H
