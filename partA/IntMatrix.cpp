@@ -56,23 +56,105 @@ mtm::IntMatrix& mtm::IntMatrix::Identity(int size) {
     return *i_matrix;
 }
 
-mtm::IntMatrix& mtm::IntMatrix::transpose() const {
+IntMatrix IntMatrix::transpose() const {
     Dimensions transpose_dims(height(), width());
     IntMatrix* transpose_matrix = new IntMatrix(transpose_dims);
     for (int i = 0; i < transpose_matrix->height(); i++) {
         for (int j = 0; j < transpose_matrix->width(); j++) {
-            transpose_matrix[i][j] = this[j][i];//todo: needs to be changed to () operator
+            (*transpose_matrix)(i, j) =
+                (*this)(j, i);  // todo: needs to be changed to () operator
         }
     }
-    return *transpose_matrix ;
+    return *transpose_matrix;
 }
 
-mtm::IntMatrix& mtm::IntMatrix::operator=(const IntMatrix& matrix) {
+IntMatrix IntMatrix::operator-(const IntMatrix& matrix) const {
+    IntMatrix* result_matrix = new IntMatrix(dims);
+    for (int i = 0; i < height(); i++) {
+        for (int j = 0; j < width(); j++) {
+            (*result_matrix)(i, j) = (*this)(i, j) - matrix(i, j);
+        }
+    }
+
+    return *result_matrix;
+}
+
+IntMatrix IntMatrix::operator-() const {
+    IntMatrix* result_matrix = new IntMatrix(dims);
+    *result_matrix -= *this;
+
+    return *result_matrix;
+}
+
+IntMatrix& IntMatrix::operator-=(const IntMatrix& matrix) {
+    for (int i = 0; i < height(); i++) {
+        for (int j = 0; j < width(); j++) {
+            (*this)(i, j) -= matrix(i, j);
+        }
+    }
+
+    return *this;
+}
+
+int& IntMatrix::operator()(int row, int col) { return array[row][col]; }
+
+int& IntMatrix::operator()(int row, int col) const { return array[row][col]; }
+
+IntMatrix& IntMatrix::operator=(const IntMatrix& matrix) {
     if (this == &matrix) {
         return *this;
     }
-    deleteArray();
-    dims = matrix.dims;
-    assignment(matrix);
+
+    for (int i = 0; i < height(); i++) {
+        for (int j = 0; j < width(); j++) {
+            array[i][j] = matrix(i, j);
+        }
+    }
+
     return *this;
 }
+
+ostream& operator<<(ostream& os, const IntMatrix& matrix) {
+    int* flattened = new int[matrix.size()];
+    int i = 0;
+    for (int curr : matrix) {
+        flattened[i++] = curr;
+    }
+
+    mtm::printMatrix(flattened,
+                     mtm::Dimensions(matrix.height(), matrix.width()));
+
+    return os;
+}
+
+IntMatrix::Iterator::Iterator(const IntMatrix* matrix, int index)
+    : matrix(matrix), index(index) {}
+
+const int& IntMatrix::Iterator::operator*() const {
+    assert(index >= 0 and index < matrix->size());
+    return matrix->array[index / matrix->height()][index % matrix->width()];
+}
+
+IntMatrix::Iterator& IntMatrix::Iterator::operator++() {
+    ++index;
+    return *this;
+}
+
+IntMatrix::Iterator IntMatrix::Iterator::operator++(int) {
+    Iterator result = *this;
+    ++*this;
+    return result;
+}
+
+bool IntMatrix::Iterator::operator==(const Iterator& another) const {
+    assert(matrix == another.matrix);
+    return index == another.index;
+}
+
+bool IntMatrix::Iterator::operator!=(const Iterator& another) const {
+    return not(*this == another);
+}
+
+IntMatrix::Iterator IntMatrix::begin() const { return Iterator(this, 0); }
+
+IntMatrix::Iterator IntMatrix::end() const { return Iterator(this, size()); }
