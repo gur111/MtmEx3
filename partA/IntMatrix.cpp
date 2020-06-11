@@ -4,75 +4,75 @@
 
 #include "IntMatrix.h"
 
-void mtm::IntMatrix::assignment(const IntMatrix& matrix) {
-    for (int i = 0; i < height(); i++) {
-        array[i] = new int[width()];
-        for (int j = 0; j <width(); j++) {
-            array[i][j] = matrix[i][j];//todo: needs to be changed to () operator
-        }
-    }
-}
-mtm::IntMatrix::IntMatrix(Dimensions dims, int initial) :
-        dims(dims.getRow(), dims.getCol()), array(new int*[dims.getRow()]) {
-    for (int i = 0; i < dims.getRow(); i++) {
-        array[i] = new int[dims.getCol()];
-        for (int j = 0; j < dims.getCol(); j++) {
-            array[i][j] = initial;
-        }
+using mtm::IntMatrix;
+
+IntMatrix::IntMatrix(Dimensions dims, int initial) :
+        dims(dims.getRow(), dims.getCol()), array(new int[dims.getRow() * dims.getCol()]) {
+    for (int i = 0; i < dims.getRow() * dims.getCol(); i++) {
+        array[i] = initial;
     }
 }
 
-mtm::IntMatrix::IntMatrix(const IntMatrix& matrix) :
-        dims(matrix.height(), matrix.width()), array(new int*[height()]) {
-    assignment(matrix);
+IntMatrix::IntMatrix(const IntMatrix& matrix) :
+        dims(matrix.height(), matrix.width()), array(new int[matrix.size()]) {
+    (*this) = matrix;
 }
 
-mtm::IntMatrix::~IntMatrix() {
-    deleteArray();
+IntMatrix::~IntMatrix() {
+    delete array;
 }
 
-void mtm::IntMatrix::deleteArray() {
-    for (int i = 0; i < height(); i++) {
-        delete[] array[i];
-    }
-    delete (array);
-}
 
-int mtm::IntMatrix::height() const {
+int IntMatrix::height() const {
     return dims.getRow();
 }
 
-int mtm::IntMatrix::width() const {
+int IntMatrix::width() const {
     return dims.getCol();
 }
 
-int mtm::IntMatrix::size() const {
+int IntMatrix::size() const {
     return height() * width();
 }
 
-mtm::IntMatrix& mtm::IntMatrix::Identity(int size) {
+IntMatrix IntMatrix::Identity(int size) {
     Dimensions dims(size, size);
-    IntMatrix* i_matrix = new IntMatrix(dims, 1);
-    return *i_matrix;
+    IntMatrix i_matrix(dims);
+    for (int i = 0; i < size; i++) {
+        i_matrix(i, i) = 1;
+    }
+    return i_matrix;
 }
 
-mtm::IntMatrix& mtm::IntMatrix::transpose() const {
-    Dimensions transpose_dims(height(), width());
-    IntMatrix* transpose_matrix = new IntMatrix(transpose_dims);
-    for (int i = 0; i < transpose_matrix->height(); i++) {
-        for (int j = 0; j < transpose_matrix->width(); j++) {
-            transpose_matrix[i][j] = this[j][i];//todo: needs to be changed to () operator
+IntMatrix IntMatrix::transpose() const {
+    Dimensions transpose_dims(width(), height());
+    IntMatrix transpose_matrix(transpose_dims);
+
+    for (int i = 0; i < transpose_matrix.height(); i++) {
+        for (int j = 0; j < transpose_matrix.width(); j++) {
+            transpose_matrix(i, j) = (*this)(j, i);
         }
     }
-    return *transpose_matrix ;
+    return transpose_matrix;
 }
 
-mtm::IntMatrix& mtm::IntMatrix::operator=(const IntMatrix& matrix) {
+IntMatrix& IntMatrix::operator=(const IntMatrix& matrix) {
     if (this == &matrix) {
         return *this;
     }
-    deleteArray();
-    dims = matrix.dims;
-    assignment(matrix);
+
+    for (int i = 0; i < height(); i++) {
+        for (int j = 0; j < width(); j++) {
+            (*this)(i, j) = matrix(i, j);
+        }
+    }
     return *this;
+}
+
+int& IntMatrix::operator()(int row, int col) {
+    return array[row * height() + col];
+}
+
+int& IntMatrix::operator()(int row, int col) const {
+    return array[row * height() + col];
 }

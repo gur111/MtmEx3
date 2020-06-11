@@ -10,7 +10,7 @@ using std::ostream;
 namespace mtm {
     class IntMatrix {
         Dimensions dims;
-        int **array;
+        int *array;
     private:
         void deleteArray();
         void assignment(const IntMatrix& matrix);
@@ -22,8 +22,8 @@ namespace mtm {
         int size() const;
         int height() const;
         int width() const;
-        static IntMatrix& Identity(int size);
-        IntMatrix& transpose() const;
+        static IntMatrix Identity(int size);
+        IntMatrix transpose() const;
         IntMatrix& operator=(const IntMatrix& matrix);
         IntMatrix& operator+=(const IntMatrix& matrix);
         IntMatrix& operator-();//need to check if we need to return a new matrix or change the current one
@@ -35,6 +35,8 @@ namespace mtm {
         IntMatrix operator==(int num) const;
         IntMatrix operator!=(int num) const;
         friend ostream& operator<<(ostream& os, const IntMatrix matrix);
+        int& operator()(int row, int col);
+        int& operator()(int row, int col) const;
     };
 
     IntMatrix operator+(const IntMatrix& matrix_a, const IntMatrix& matrix_b);
