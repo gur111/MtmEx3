@@ -3,5 +3,19 @@
 		{
 			"path": "."
 		}
-	]
+	],
+	"settings": {
+		"cmake.sourceDirectory": "${workspaceFolder}/partA",
+		"files.associations": {
+			"system_error": "cpp",
+			"*.tcc": "cpp",
+			"cstddef": "cpp",
+			"string": "cpp",
+			"string_view": "cpp",
+			"ostream": "cpp",
+			"iosfwd": "cpp",
+			"iostream": "cpp",
+			"new": "cpp"
+		}
+	}
 }

@@ -91,6 +91,11 @@ IntMatrix& IntMatrix::operator=(const IntMatrix& matrix) {
         return *this;
     }
 
+    for (iterator it_this = this->begin(), it_other = matrix.begin();
+         it_other != matrix.end(); it_other++, it_this++) {
+        *(it_this++) = *(it_other++);
+    }
+
     for (int i = 0; i < height(); i++) {
         for (int j = 0; j < width(); j++) {
             (*this)(i, j) = matrix(i, j);
@@ -99,42 +104,52 @@ IntMatrix& IntMatrix::operator=(const IntMatrix& matrix) {
     return *this;
 }
 
-ostream& operator<<(ostream& os, const IntMatrix& matrix) {
-
-    mtm::printMatrix(matrix,
-                     mtm::Dimensions(matrix.height(), matrix.width()));
-
-    return os;
+const int& IntMatrix::const_iterator::operator*() const {
+    assert(index >= 0 and index < this->matrix->size());
+    return this->matrix->array[index];
 }
 
-IntMatrix::Iterator::Iterator(const IntMatrix* matrix, int index)
+IntMatrix::iterator::iterator(const IntMatrix* matrix, int index)
     : matrix(matrix), index(index) {}
 
-const int& IntMatrix::Iterator::operator*() const {
+int& IntMatrix::iterator::operator*() const {
     assert(index >= 0 and index < matrix->size());
     return matrix->array[index];
 }
 
-IntMatrix::Iterator& IntMatrix::Iterator::operator++() {
+IntMatrix::iterator& IntMatrix::iterator::operator++() {
     ++index;
     return *this;
 }
 
-IntMatrix::Iterator IntMatrix::Iterator::operator++(int) {
-    Iterator result = *this;
+IntMatrix::iterator IntMatrix::iterator::operator++(int) {
+    iterator result = *this;
     ++*this;
     return result;
 }
 
-bool IntMatrix::Iterator::operator==(const Iterator& another) const {
+bool IntMatrix::iterator::operator==(const iterator& another) const {
     assert(matrix == another.matrix);
     return index == another.index;
 }
 
-bool IntMatrix::Iterator::operator!=(const Iterator& another) const {
+bool IntMatrix::iterator::operator!=(const iterator& another) const {
     return not(*this == another);
 }
 
-IntMatrix::Iterator IntMatrix::begin() const { return Iterator(this, 0); }
+IntMatrix::iterator IntMatrix::begin() const { return iterator(this, 0); }
 
-IntMatrix::Iterator IntMatrix::end() const { return Iterator(this, size()); }
+IntMatrix::iterator IntMatrix::end() const { return iterator(this, size()); }
+
+std::ostream& std::operator<<(std::ostream& os, const IntMatrix& matrix) {
+    int* flattened = new int[matrix.size()];
+    int i = 0;
+    for (int curr : matrix) {
+        flattened[i++] = curr;
+    }
+
+    os << mtm::printMatrix(matrix.array,
+                           mtm::Dimensions(matrix.height(), matrix.width()));
+
+    return os;
+}

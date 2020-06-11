@@ -42,7 +42,7 @@ class IntMatrix {
     IntMatrix operator>=(int num) const;
     IntMatrix operator==(int num) const;
     IntMatrix operator!=(int num) const;
-    friend ostream& operator<<(ostream& os, const IntMatrix& matrix);
+    friend std::ostream& operator<<(std::ostream& os, const IntMatrix& matrix);
 };
 
 IntMatrix operator+(const IntMatrix& matrix_a, const IntMatrix& matrix_b);
