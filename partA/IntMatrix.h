@@ -48,9 +48,9 @@ class IntMatrix {
     friend std::ostream& operator<<(std::ostream& os, const IntMatrix& matrix);
 };
 
-IntMatrix operator+(int scalar, const IntMatrix& matrix_b);
-bool any(IntMatrix matrix);
-bool all(IntMatrix matrix);
+IntMatrix& operator+(int scalar, const IntMatrix& matrix_b);
+bool any(IntMatrix& matrix);
+bool all(IntMatrix& matrix);
 
 class IntMatrix::const_iterator {
    private:

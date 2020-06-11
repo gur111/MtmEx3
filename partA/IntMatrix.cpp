@@ -84,7 +84,7 @@ IntMatrix& IntMatrix::operator+(int scalar) const {
     return (*result_matrix) += scalar;
 }
 
-IntMatrix& operator+(int scalar, const IntMatrix& matrix_b) {
+IntMatrix& mtm::operator+(int scalar, const IntMatrix& matrix_b) {
     return matrix_b + scalar;
 }
 
@@ -196,6 +196,26 @@ IntMatrix& IntMatrix::operator==(const IntMatrix& matrix) const {
     }
 
     return *result;
+}
+
+bool mtm::any(IntMatrix& matrix) {
+    for (IntMatrix::iterator it = matrix.begin(); it != matrix.end(); it++) {
+        if (*it != 0) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool mtm::all(IntMatrix& matrix) {
+    for (IntMatrix::iterator it = matrix.begin(); it != matrix.end(); it++) {
+        if (*it == 0) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 const int& IntMatrix::const_iterator::operator*() const {
