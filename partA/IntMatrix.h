@@ -6,12 +6,10 @@
 
 #include "Auxiliaries.h"
 
-using std::ostream;
-
 namespace mtm {
 class IntMatrix {
     Dimensions dims;
-    int** array;
+    int* array;
 
    private:
     void deleteArray();
@@ -29,7 +27,7 @@ class IntMatrix {
     int size() const;
     int height() const;
     int width() const;
-    static IntMatrix& Identity(int size);
+    static IntMatrix Identity(int size);
     IntMatrix transpose() const;
     IntMatrix& operator=(const IntMatrix& matrix);
     IntMatrix& operator+=(const IntMatrix& matrix);
