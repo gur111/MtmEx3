@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <string>
-
 #include "Auxiliaries.h"
 
 namespace mtm {

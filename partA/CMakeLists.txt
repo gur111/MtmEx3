@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.0.0)
 
 project(MtmEx3)
 
-
 set(CMAKE_TEST_DEBUG "-pedantic-errors -Wall -Werror")
 set(CMAKE_TEST_RELEASE "${CMAKE_TEST_DEBUG} -DNDEBUG")
 
