@@ -5,8 +5,6 @@
 #include <iostream>
 #include "Auxiliaries.h"
 
-using std::ostream;
-
 namespace mtm {
     class IntMatrix {
         Dimensions dims;
@@ -14,6 +12,7 @@ namespace mtm {
     private:
         void deleteArray();
         void assignment(const IntMatrix& matrix);
+
     public:
         IntMatrix(Dimensions dims, int initial = 0);
         IntMatrix(const IntMatrix& matrix);
