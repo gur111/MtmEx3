@@ -31,5 +31,7 @@
 *.out
 *.app
 
-# Build
+.idea/
+.vscode/
 build/
+MtmEx3.code-workspace
