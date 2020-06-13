@@ -70,7 +70,7 @@ bool test_4(){
     if(all(mat_1)){
         return false;
     }
-    if(any(0==mat_2)){
+    if(any(mat_2==0)){
         return false;
     }
     int counter = 0;
@@ -80,7 +80,6 @@ bool test_4(){
             ++counter;
         }
     }
-    test_print_matrix("test_4, 3<=mat_2",3<=mat_2);
     return true;
 }
 
@@ -115,6 +114,7 @@ void run_test(std::function<bool()> test, std::string test_name){
 int main(){
     int test_num =5;
     std::function<bool()> tests[5]= {test_1,test_2,test_3,test_4,test_5};
+
     for(int i=0;i<test_num;++i){
         run_test(tests[i],"Test "+std::to_string(i+1));
     }
