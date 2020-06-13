@@ -88,11 +88,6 @@ IntMatrix& mtm::operator+(int scalar, const IntMatrix& matrix_b) {
     return matrix_b + scalar;
 }
 
-IntMatrix& IntMatrix::operator+(int scalar) const {
-    IntMatrix* result_matrix = new IntMatrix(*this);
-    return (*result_matrix) += scalar;
-}
-
 IntMatrix& IntMatrix::operator-=(const IntMatrix& matrix) {
     for (int i = 0; i < height(); i++) {
         for (int j = 0; j < width(); j++) {
@@ -283,14 +278,4 @@ std::ostream& std::operator<<(std::ostream& os, const IntMatrix& matrix) {
                            mtm::Dimensions(matrix.height(), matrix.width()));
 
     return os;
-}
-IntMatrix& IntMatrix::operator==(int num) const {
-    IntMatrix* result = new IntMatrix(*this);
-
-    for (iterator it_result = this->begin(), it_this = this->begin();
-         it_this != this->end(); it_this++, it_result++) {
-        *it_result = *it_this == num ? 1 : 0;
-    }
-
-    return *result;
 }
