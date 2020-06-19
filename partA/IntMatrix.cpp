@@ -250,7 +250,7 @@ IntMatrix::iterator IntMatrix::begin() const { return iterator(this, 0); }
 
 IntMatrix::iterator IntMatrix::end() const { return iterator(this, size()); }
 
-std::ostream& std::operator<<(std::ostream& os, const IntMatrix& matrix) {
+std::ostream& mtm::operator<<(std::ostream& os, const IntMatrix& matrix) {
     int* flattened = new int[matrix.size()];
     int i = 0;
     for (int curr : matrix) {
