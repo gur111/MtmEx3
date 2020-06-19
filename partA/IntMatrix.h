@@ -45,9 +45,7 @@ class IntMatrix {
 };
 
 IntMatrix& operator+(int scalar, const IntMatrix& matrix_b);
-bool any(IntMatrix& matrix);
 bool any(const IntMatrix& matrix);
-bool all(IntMatrix& matrix);
 bool all(const IntMatrix& matrix);
 class IntMatrix::const_iterator {
    private:
