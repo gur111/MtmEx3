@@ -29,16 +29,16 @@ int IntMatrix::width() const { return dims.getCol(); }
 
 int IntMatrix::size() const { return height() * width(); }
 
-IntMatrix& IntMatrix::Identity(int size) {
+IntMatrix IntMatrix::Identity(int size) {
     Dimensions dims(size, size);
-    IntMatrix* i_matrix = new IntMatrix(dims);
+    IntMatrix i_matrix(dims);
     for (int i = 0; i < size; i++) {
-        (*i_matrix)(i, i) = 1;
+        i_matrix(i, i) = 1;
     }
-    return *i_matrix;
+    return i_matrix;
 }
 
-IntMatrix& IntMatrix::transpose() const {
+IntMatrix IntMatrix::transpose() const {
     Dimensions transpose_dims(width(), height());
     IntMatrix transpose_matrix(transpose_dims);
 

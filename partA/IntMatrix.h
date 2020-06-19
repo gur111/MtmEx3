@@ -23,8 +23,8 @@ class IntMatrix {
     int size() const;
     int height() const;
     int width() const;
-    static IntMatrix& Identity(int size);
-    IntMatrix& transpose() const;
+    static IntMatrix Identity(int size);
+    IntMatrix transpose() const;
     IntMatrix& operator=(const IntMatrix& matrix);
     IntMatrix& operator+=(int scalar);
     IntMatrix& operator-() const;
