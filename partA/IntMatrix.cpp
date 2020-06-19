@@ -193,15 +193,6 @@ IntMatrix& IntMatrix::operator==(const IntMatrix& matrix) const {
     return *result;
 }
 
-bool mtm::any(IntMatrix& matrix) {
-    for (IntMatrix::iterator it = matrix.begin(); it != matrix.end(); it++) {
-        if (*it != 0) {
-            return true;
-        }
-    }
-
-    return false;
-}
 bool mtm::any(const IntMatrix& matrix) {
     for (IntMatrix::iterator it = matrix.begin(); it != matrix.end(); it++) {
         if (*it != 0) {
@@ -211,15 +202,7 @@ bool mtm::any(const IntMatrix& matrix) {
 
     return false;
 }
-bool mtm::all(IntMatrix& matrix) {
-    for (IntMatrix::iterator it = matrix.begin(); it != matrix.end(); it++) {
-        if (*it == 0) {
-            return false;
-        }
-    }
 
-    return true;
-}
 bool mtm::all(const IntMatrix& matrix) {
     for (IntMatrix::iterator it = matrix.begin(); it != matrix.end(); it++) {
         if (*it == 0) {
