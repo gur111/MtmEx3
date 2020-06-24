@@ -87,7 +87,7 @@ Matrix<T> Matrix<T>::operator-(const Matrix<T>& matrix) const {
 }
 
 template <class T>
-Matrix<T>& Matrix<T>::operator-() const {
+Matrix<T> Matrix<T>::operator-() const {
     IntMatrix<T> result_matrix(dims);
     result_matrix -= *this;
 
