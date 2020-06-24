@@ -8,6 +8,8 @@
 
 using mtm::IntMatrix;
 
+namespace mtm {
+
 IntMatrix::IntMatrix(Dimensions dims, int initial)
     : dims(dims.getRow(), dims.getCol()),
       array(new int[dims.getRow() * dims.getCol()]) {
@@ -85,7 +87,7 @@ IntMatrix IntMatrix::operator+(int scalar) const {
     return result_matrix += scalar;
 }
 
-IntMatrix mtm::operator+(int scalar, const IntMatrix& matrix_b) {
+IntMatrix operator+(int scalar, const IntMatrix& matrix_b) {
     return matrix_b + scalar;
 }
 
@@ -120,9 +122,10 @@ IntMatrix& IntMatrix::operator=(const IntMatrix& matrix) {
     if (this == &matrix) {
         return *this;
     }
+    iterator it_this = this->begin();
 
-    for (iterator it_this = this->begin(), it_other = matrix.begin();
-         it_other != matrix.end(); it_other++, it_this++) {
+    for (const_iterator it_other = matrix.begin(); it_other != matrix.end();
+         it_other++, it_this++) {
         *it_this = *it_other;
     }
 
@@ -131,9 +134,10 @@ IntMatrix& IntMatrix::operator=(const IntMatrix& matrix) {
 
 IntMatrix IntMatrix::operator>(int num) const {
     IntMatrix result(*this);
+    iterator it_result = result.begin();
 
-    for (iterator it_result = result.begin(), it_this = this->begin();
-         it_this != this->end(); it_this++, it_result++) {
+    for (const_iterator it_this = this->begin(); it_this != this->end();
+         it_this++, it_result++) {
         *it_result = *it_this > num ? 1 : 0;
     }
 
@@ -141,9 +145,10 @@ IntMatrix IntMatrix::operator>(int num) const {
 }
 IntMatrix IntMatrix::operator<(int num) const {
     IntMatrix result(*this);
+    iterator it_result = result.begin();
 
-    for (iterator it_result = result.begin(), it_this = this->begin();
-         it_this != this->end(); it_this++, it_result++) {
+    for (const_iterator it_this = this->begin(); it_this != this->end();
+         it_this++, it_result++) {
         *it_result = *it_this < num ? 1 : 0;
     }
 
@@ -170,9 +175,10 @@ IntMatrix IntMatrix::operator!=(int num) const {
 
 IntMatrix IntMatrix::operator==(int num) const {
     IntMatrix result(*this);
+    iterator it_result = result.begin();
 
-    for (iterator it_result = result.begin(), it_this = this->begin();
-         it_this != this->end(); it_this++, it_result++) {
+    for (const_iterator it_this = this->begin(); it_this != this->end();
+         it_this++, it_result++) {
         *it_result = *it_this == num ? 1 : 0;
     }
 
@@ -181,9 +187,9 @@ IntMatrix IntMatrix::operator==(int num) const {
 
 IntMatrix IntMatrix::operator==(const IntMatrix& matrix) const {
     IntMatrix result(*this);
+    iterator it_result = result.begin();
 
-    for (iterator it_result = result.begin(), it_this = this->begin(),
-                  it_other = matrix.begin();
+    for (const_iterator it_other = matrix.begin(), it_this = this->begin();
          it_this != this->end(); it_this++, it_result++, it_other++) {
         *it_result = *it_this == *it_other ? 1 : 0;
     }
@@ -191,8 +197,9 @@ IntMatrix IntMatrix::operator==(const IntMatrix& matrix) const {
     return result;
 }
 
-bool mtm::any(const IntMatrix& matrix) {
-    for (IntMatrix::iterator it = matrix.begin(); it != matrix.end(); it++) {
+bool any(const IntMatrix& matrix) {
+    for (IntMatrix::const_iterator it = matrix.begin(); it != matrix.end();
+         it++) {
         if (*it != 0) {
             return true;
         }
@@ -201,8 +208,9 @@ bool mtm::any(const IntMatrix& matrix) {
     return false;
 }
 
-bool mtm::all(const IntMatrix& matrix) {
-    for (IntMatrix::iterator it = matrix.begin(); it != matrix.end(); it++) {
+bool all(const IntMatrix& matrix) {
+    for (IntMatrix::const_iterator it = matrix.begin(); it != matrix.end();
+         it++) {
         if (*it == 0) {
             return false;
         }
@@ -216,7 +224,7 @@ const int& IntMatrix::const_iterator::operator*() const {
     return this->matrix->array[index];
 }
 
-IntMatrix::iterator::iterator(const IntMatrix* matrix, int index)
+IntMatrix::iterator::iterator(IntMatrix* matrix, int index)
     : matrix(matrix), index(index) {}
 
 int& IntMatrix::iterator::operator*() const {
@@ -244,19 +252,20 @@ bool IntMatrix::iterator::operator!=(const iterator& another) const {
     return not(*this == another);
 }
 
-IntMatrix::iterator IntMatrix::begin() const { return iterator(this, 0); }
+IntMatrix::iterator IntMatrix::begin() { return iterator(this, 0); }
+IntMatrix::iterator IntMatrix::end() { return iterator(this, size()); }
 
-IntMatrix::iterator IntMatrix::end() const { return iterator(this, size()); }
+IntMatrix::const_iterator IntMatrix::begin() const {
+    return const_iterator(this, 0);
+}
+IntMatrix::const_iterator IntMatrix::end() const {
+    return const_iterator(this, size());
+}
 
-std::ostream& mtm::operator<<(std::ostream& os, const IntMatrix& matrix) {
-    int* flattened = new int[matrix.size()];
-    int i = 0;
-    for (int curr : matrix) {
-        flattened[i++] = curr;
-    }
-
-    os << mtm::printMatrix(matrix.array,
-                           mtm::Dimensions(matrix.height(), matrix.width()));
+std::ostream& operator<<(std::ostream& os, const IntMatrix& matrix) {
+    os << printMatrix(matrix.array,
+                      Dimensions(matrix.height(), matrix.width()));
 
     return os;
 }
+};  // namespace mtm

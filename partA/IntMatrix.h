@@ -14,8 +14,11 @@ class IntMatrix {
    public:
     class iterator;
     class const_iterator;
-    iterator begin() const;
-    iterator end() const;
+    iterator begin();
+    iterator end();
+
+    const_iterator begin() const;
+    const_iterator end() const;
 
     IntMatrix(Dimensions dims, int initial = 0);
     IntMatrix(const IntMatrix& matrix);
@@ -51,7 +54,7 @@ class IntMatrix::const_iterator {
    private:
     int index;
     const IntMatrix* matrix;
-    const_iterator(IntMatrix* matrix, int index);
+    const_iterator(const IntMatrix* matrix, int index);
     friend class IntMatrix;
 
    public:
@@ -68,8 +71,9 @@ class IntMatrix::const_iterator {
 class IntMatrix::iterator {
    private:
     int index;
-    const IntMatrix* matrix;
-    iterator(const IntMatrix* matrix, int index);
+    IntMatrix* matrix;
+    
+    iterator(IntMatrix* matrix, int index);
     friend class IntMatrix;
 
    public:
