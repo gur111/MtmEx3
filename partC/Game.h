@@ -9,7 +9,7 @@
 
 namespace mtm {
 class Game {
-    GameBoard* board;
+    GameBoard& board;
 
    private:
     std::shared_ptr<Character> getCharacter(const GridPoint& point);
@@ -31,7 +31,7 @@ class Game {
     void attack(const GridPoint& src_coordinates,
                 const GridPoint& dst_coordinates);
     void reload(const GridPoint& coordinates);
-    bool isOver(Team* winningTeam = NULL) const; 
+    bool isOver(Team* winningTeam = NULL) const;
 
     // Iterations
     class iterator;
@@ -49,6 +49,38 @@ class Game {
 };
 
 std::ostream& operator<<(std::ostream& os, const Game& game);  // TODO
-};                                                             // namespace mtm
+class Game::iterator {
+    int index;
+    Game* game;
+    iterator(Game* game, int index);
+
+    friend class Game;
+
+   public:
+    std::shared_ptr<Character> operator*() const;
+    iterator& operator++();
+    iterator operator++(int);
+    bool operator==(const iterator& it) const;
+    bool operator!=(const iterator& it) const;
+    iterator(const iterator&) = default;
+    iterator& operator=(const iterator&) = default;
+};
+class Game::const_iterator {
+    int index;
+    const Game* game;
+    const_iterator(const Game* game, int index);
+
+    friend class Game;
+
+   public:
+    std::shared_ptr<Character> operator*() const;
+    const_iterator& operator++();
+    const_iterator operator++(int);
+    bool operator==(const const_iterator& it) const;
+    bool operator!=(const const_iterator& it) const;
+    const_iterator(const const_iterator&) = default;
+    const_iterator& operator=(const const_iterator&) = default;
+};
+};  // namespace mtm
 
 #endif  // MTMEX3_GAME_H

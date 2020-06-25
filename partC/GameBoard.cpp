@@ -19,7 +19,8 @@ std::shared_ptr<Character> &GameBoard::getCell(const GridPoint point) {
     return data[point.row][point.col];
 }
 
-void GameBoard::set(const GridPoint point, std::shared_ptr<Character> character) {
+void GameBoard::set(const GridPoint point,
+                    std::shared_ptr<Character> character) {
     getCell(point) = character;
 }
 
