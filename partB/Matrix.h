@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 
-#include "Auxiliaries.h"
+#include "../Auxiliaries.h"
 
 namespace mtm {
 
@@ -15,31 +15,38 @@ class Matrix {
     Dimensions dims;
     T* array;
 
-   private:
    public:
-    class iterator;
-    class const_iterator;
+    // Exceptions
     class AccessIllegalElement;
     class IllegalInitialization;
     class DimensionMismatch;
 
+    // Iterations
+    class iterator;
+    class const_iterator;
     iterator begin();
     iterator end();
-
     const_iterator begin() const;
     const_iterator end() const;
 
+    // Ctors and Dtor
     Matrix(Dimensions dims, T initial = T());
     Matrix(const Matrix& matrix);
+    ~Matrix();
 
+    // Functions (Static Methods)
     static Matrix Identity(int size);
     static Matrix Diagonal(int size, T values);
 
-    ~Matrix();
+    // Methods
     int size() const;
     int height() const;
     int width() const;
     Matrix transpose() const;
+    template <class Functor>
+    Matrix apply(Functor op) const;
+
+    // Operators
     Matrix& operator=(const Matrix& matrix);
     Matrix& operator+=(T object);
     Matrix operator-() const;
@@ -56,8 +63,8 @@ class Matrix {
     Matrix<bool> operator!=(T object) const;
     Matrix<bool> operator==(T object) const;
     Matrix operator==(const Matrix& matrix) const;  // todo:why do we need this?
-    template <class Functor>
-    Matrix apply(Functor op) const;
+    template <class U>
+    friend Matrix<U> operator+(U object, const Matrix<U>& matrix_b);
 };
 
 template <class T>
@@ -96,7 +103,6 @@ class Matrix<T>::iterator {
     bool operator!=(const iterator& it) const;
     iterator(const iterator&) = default;
     iterator& operator=(const iterator&) = default;
-    iterator begin() const;
 };
 
 template <class T>
@@ -326,6 +332,7 @@ Matrix<bool> Matrix<T>::operator<=(T object) const {
 template <class T>
 Matrix<bool> Matrix<T>::operator!=(T object) const {
     Matrix<bool> ones(dims, true);
+    // Subtraction between booleans is well defined (and is infact XOR)
     Matrix<bool> result = ones - (*this == object);
     return result;
 }
@@ -395,7 +402,7 @@ Matrix<T> Matrix<T>::apply(Functor operation) const {
 }
 
 template <class T>
-class Matrix<T>::AccessIllegalElement : std::exception {
+class Matrix<T>::AccessIllegalElement : public Exception {
     const std::string error =
         "Mtm matrix error: An attempt to access an illegal element";
 
@@ -404,7 +411,7 @@ class Matrix<T>::AccessIllegalElement : std::exception {
 };
 
 template <class T>
-class Matrix<T>::IllegalInitialization : std::exception {
+class Matrix<T>::IllegalInitialization : public Exception {
     std::string error = "Mtm matrix error: Illegal initialization values";
 
    public:
@@ -417,7 +424,7 @@ class Matrix<T>::IllegalInitialization : std::exception {
 };
 
 template <class T>
-class Matrix<T>::DimensionMismatch : std::exception {
+class Matrix<T>::DimensionMismatch : public Exception {
     const std::string error;
 
    public:
