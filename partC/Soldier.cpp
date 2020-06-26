@@ -62,7 +62,7 @@ void Soldier::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
     for (point.row; point.row < board.height(); point.row++) {
         for (point.col = 0; point.col < board.width(); point.col++) {
             if (GridPoint::distance(point, d_place) <= ceil(range / 3) &&
-                board(point.row, point.col)->team != team &&
+                board(point.row, point.col)->getTeam() != team &&
                 board(point.row, point.col) != nullptr) {
                 shoot(board, s_place, point);
             }
