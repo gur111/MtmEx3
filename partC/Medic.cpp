@@ -10,11 +10,11 @@ using mtm::Medic;
 
 Medic::Medic(units_t health, units_t power, Team team, units_t range,
              units_t ammo)
-        : Character(health, power, team, range, ammo) {
+    : Character(health, power, team, range, ammo, MEDIC) {
     type = MEDIC;
 }
 
-void Medic::move(GameBoard <Character>& board, const mtm::GridPoint& s_place,
+void Medic::move(GameBoard<Character>& board, const mtm::GridPoint& s_place,
                  const mtm::GridPoint& d_place) {
     if (GridPoint::distance(s_place, d_place) >= 5) {
         throw MoveTooFar();
@@ -32,12 +32,13 @@ void Medic::move(GameBoard <Character>& board, const mtm::GridPoint& s_place,
 
 void Medic::reload() { ammo += 5; }
 
-void Medic::attack(GameBoard <Character>& board, const mtm::GridPoint& s_place,
+void Medic::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
                    const mtm::GridPoint& d_place) {
     if (!board.isWithinLimits(d_place)) {
         throw IllegalCell();
     }
-    if (GridPoint::distance(d_place, s_place) == 0) {
+    if (board(d_place.row, d_place.col) == nullptr ||
+        GridPoint::distance(d_place, s_place) == 0) {
         throw IllegalTarget();
     }
     if (GridPoint::distance(d_place, s_place) > range) {
@@ -55,10 +56,9 @@ void Medic::attack(GameBoard <Character>& board, const mtm::GridPoint& s_place,
     if (board(d_place.row, d_place.col)->getHealth() <= 0) {
         board(d_place.row, d_place.col) = nullptr;
     }
-
 }
 
 std::shared_ptr<mtm::Character> Medic::clone() const {
-    return std::shared_ptr<mtm::Character>(new Medic(health, power,
-                                                     team, range, ammo));
+    return std::shared_ptr<mtm::Character>(
+        new Medic(health, power, team, range, ammo));
 }

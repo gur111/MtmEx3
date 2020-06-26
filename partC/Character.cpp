@@ -12,13 +12,14 @@
 namespace mtm {
 
     Character::Character(units_t health, units_t power, Team team,
-                         units_t range, units_t ammo)
+                         units_t range, units_t ammo, CharacterType type)
             : health(health),
               power(power),
               team(team),
               range(range),
-              ammo(ammo) {
-        if (health >= 0 || power < 0 || range < 0 || ammo < 0) {
+              ammo(ammo),
+              type(type) {
+        if (health <= 0 || power < 0 || range < 0 || ammo < 0) {
             throw IllegalArgument();
         }
     }

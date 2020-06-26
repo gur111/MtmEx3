@@ -27,8 +27,8 @@ class GameBoard {
     const int &width() const;
     const int &height() const;
     void set(const GridPoint point, std::shared_ptr<T> character);
-    std::shared_ptr<T> get(const GridPoint point);
-    std::shared_ptr<T> operator()(int i, int j);
+    std::shared_ptr<T>& get(const GridPoint point);
+    std::shared_ptr<T>& operator()(int i, int j);
     // const std::shared_ptr<Character> get(GridPoint point) const;
 };
 
@@ -45,7 +45,9 @@ GameBoard<T>::GameBoard(Dimensions dims)
     : data(*(new std::vector<std::vector<std::shared_ptr<T>>>(
           verifyDimensions(dims).getRow(),
           std::vector<std::shared_ptr<T>>(verifyDimensions(dims).getCol(),
-                                          nullptr)))) {}
+                                          nullptr)))),
+      height_(dims.getRow()),
+      width_(dims.getCol()) {}
 
 template <class T>
 GameBoard<T>::~GameBoard() {
@@ -76,19 +78,19 @@ void GameBoard<T>::set(const GridPoint point, std::shared_ptr<T> character) {
 }
 
 template <class T>
-std::shared_ptr<T> GameBoard<T>::get(const GridPoint point) {
+std::shared_ptr<T>& GameBoard<T>::get(const GridPoint point) {
     return getCell(point);
 }
 
 template <class T>
-std::shared_ptr<T> GameBoard<T>::operator()(int i, int j) {
-    return this->get(GridPoint(i, j));
+std::shared_ptr<T>& GameBoard<T>::operator()(int i, int j) {
+    return this->getCell(GridPoint(i, j));
 }
 
 template <class T>
 bool GameBoard<T>::isWithinLimits(const GridPoint point) const {
-    return point.col > width() || point.row > height() || point.row < 0 ||
-           point.col < 0;
+    return point.col < width() && point.row < height() && point.row >= 0 &&
+           point.col >= 0;
 }
 
 template <class T>

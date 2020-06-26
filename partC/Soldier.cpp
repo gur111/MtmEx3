@@ -10,7 +10,7 @@ using mtm::Soldier;
 
 Soldier::Soldier(units_t health, units_t power, Team team, units_t range,
                  units_t ammo)
-        : Character(health, power, team, range, ammo) {
+        : Character(health, power, team, range, ammo, SOLDIER) {
     type = SOLDIER;
 }
 

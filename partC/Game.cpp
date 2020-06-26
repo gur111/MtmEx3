@@ -43,9 +43,13 @@ Game& Game::operator=(const Game& other) {
 Game::~Game() { delete &board; }
 
 std::ostream& operator<<(std::ostream& os, const Game& game) {
-    std::string str(game.board.height() * game.board.width(), ' ');
-    for (int i; i < game.board.height(); i++) {
-        for (int j; j < game.board.width(); j++) {
+    std::string str = "";
+    for (int i = 0; i < game.board.height(); i++) {
+        for (int j = 0; j < game.board.width(); j++) {
+            if(game.board(i, j) == nullptr){
+                str += " ";
+                continue;
+            }
             switch (game.board(i, j)->getType()) {
                 case SOLDIER:
                     str += "S";
@@ -57,13 +61,12 @@ std::ostream& operator<<(std::ostream& os, const Game& game) {
                     str += "N";
                     break;
                 default:
-                    str += " ";
+                    assert(false);
             }
         }
     }
     return printGameBoard(os, &str[0], &str[str.length() - 1],
                           game.board.width());
-    // TODO: Print health and 8stuff
 }
 
 std::shared_ptr<Character> Game::getCharacter(const GridPoint& point) {
