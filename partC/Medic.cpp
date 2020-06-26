@@ -22,6 +22,9 @@ void Medic::move(GameBoard<Character>& board, const mtm::GridPoint& s_place,
     if (board(d_place.row, d_place.col) != nullptr) {
         throw CellOccupied();
     }
+    if (board.isWithinLimits(d_place)== false){
+        throw IllegalCell();
+    }
     std::shared_ptr<Character> temp = board(s_place.row, s_place.col);
     board(d_place.row, d_place.col) = temp;
     board(s_place.row, s_place.col) = nullptr;
@@ -31,12 +34,14 @@ void Medic::reload() { ammo += 5; }
 
 void Medic::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
                    const mtm::GridPoint& d_place) {
-    if (GridPoint::distance(s_place, d_place) > range ||
-        GridPoint::distance(s_place, d_place) > ceil(range / 2)) {
-        throw OutOfRange();
+    if(!board.isWithinLimits(d_place)){
+        throw IllegalCell();
     }
-    if (GridPoint::distance(d_place, s_place)) {
+    if (GridPoint::distance(d_place, s_place) == 0) {
         throw IllegalTarget();
+    }
+    if (GridPoint::distance(d_place, s_place)>range){
+        throw OutOfRange();
     }
     if (board(d_place.row, d_place.col)->getTeam() == team) {
         board(d_place.row, d_place.col)->changeHealth(power);

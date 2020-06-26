@@ -16,6 +16,9 @@ void Sniper::move(GameBoard<Character>& board, const mtm::GridPoint& s_place, co
     if (GridPoint::distance(s_place, d_place) >= 4) {
         throw MoveTooFar();
     }
+    if (!board.isWithinLimits(d_place)){
+        throw IllegalCell();
+    }
     if (board(d_place.row, d_place.col) != nullptr) {
         throw CellOccupied();
     }
@@ -41,21 +44,18 @@ void Sniper::shoot(mtm::GameBoard<Character>& board, const mtm::GridPoint& s_pla
 }
 
 void Sniper::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
-    if (board(d_place.row, d_place.col) == nullptr) {
-        throw IllegalTarget();
-    }
-    if (d_place.col > board.width() || d_place.row > board.height()) {
+    if (board.isWithinLimits(d_place)) {
         throw IllegalCell();
-    }
-    if (ammo < 1) {
-        throw OutOfAmmo();
     }
     if (GridPoint::distance(s_place, d_place) > range ||
         GridPoint::distance(s_place, d_place) < ceil(range / 2)) {
         throw OutOfRange();
     }
+    if (ammo < 1) {
+        throw OutOfAmmo();
+    }
     if (board(d_place.row, d_place.col)->getTeam() == team) {
         throw IllegalTarget();
     }
-
+    shoot(board,s_place,d_place);
 }

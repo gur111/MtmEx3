@@ -11,19 +11,24 @@
 
 namespace mtm {
 
-Character::Character(units_t s_health, units_t s_power, Team s_team,
-                     units_t s_range, units_t s_ammo)
-    : health(s_health),
-      power(s_power),
-      team(s_team),
-      range(s_range),
-      ammo(s_ammo) {}
+    Character::Character(units_t health, units_t power, Team team,
+                         units_t range, units_t ammo)
+            : health(health),
+              power(power),
+              team(team),
+              range(range),
+              ammo(ammo) {
+        if (health >= 0 || power < 0 || range < 0 || ammo < 0) {
+            throw IllegalArgument();
+        }
+    }
 
-CharacterType Character::getType() const { return type; }
+    CharacterType Character::getType() const { return type; }
 
-Team Character::getTeam() const { return team; }
+    Team Character::getTeam() const { return team; }
 
-units_t Character::getHealth() const { return health; }
-void Character::changeHealth(units_t delta) { health += delta; }
+    units_t Character::getHealth() const { return health; }
+
+    void Character::changeHealth(units_t delta) { health += delta; }
 
 }  // namespace mtm

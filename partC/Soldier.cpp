@@ -10,14 +10,17 @@ using mtm::Soldier;
 
 Soldier::Soldier(units_t health, units_t power, Team team, units_t range,
                  units_t ammo)
-    : Character(health, power, team, range, ammo) {
+        : Character(health, power, team, range, ammo) {
     type = SOLDIER;
 }
 
-void Soldier::move(GameBoard<Character>& board, const mtm::GridPoint& s_place,
+void Soldier::move(GameBoard <Character>& board, const mtm::GridPoint& s_place,
                    const mtm::GridPoint& d_place) {
     if (GridPoint::distance(s_place, d_place) >= 3) {
         throw MoveTooFar();
+    }
+    if (board.isWithinLimits(d_place) == false) {
+        throw IllegalCell();
     }
     if (board(d_place.row, d_place.col) != nullptr) {
         throw CellOccupied();
@@ -31,7 +34,7 @@ void Soldier::reload() {
     ammo += 3;
 }
 
-void Soldier::shoot(GameBoard<Character>& board, const mtm::GridPoint& s_place,
+void Soldier::shoot(GameBoard <Character>& board, const mtm::GridPoint& s_place,
                     const mtm::GridPoint& d_place) {
     if (d_place.row == s_place.row && d_place.col == s_place.col) {
         board(d_place.row, d_place.col)->changeHealth(-ceil(power / 2));
@@ -43,9 +46,9 @@ void Soldier::shoot(GameBoard<Character>& board, const mtm::GridPoint& s_place,
     }
 }
 
-void Soldier::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
+void Soldier::attack(GameBoard <Character>& board, const mtm::GridPoint& s_place,
                      const mtm::GridPoint& d_place) {
-    if (d_place.col > board.width() || d_place.row > board.height()) {
+    if (!board.isWithinLimits(d_place)) {
         throw IllegalCell();
     }
     if (ammo < 1) {
@@ -62,7 +65,7 @@ void Soldier::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
     for (point.row; point.row < board.height(); point.row++) {
         for (point.col = 0; point.col < board.width(); point.col++) {
             if (GridPoint::distance(point, d_place) <= ceil(range / 3) &&
-                board(point.row, point.col)->team != team &&
+                board(point.row, point.col)->getTeam() != team &&
                 board(point.row, point.col) != nullptr) {
                 shoot(board, s_place, point);
             }

@@ -22,7 +22,7 @@ class GameBoard {
    public:
     GameBoard(Dimensions dims);
     ~GameBoard();
-    bool isWithinLimit(const GridPoint point) const;
+    bool isWithinLimits(const GridPoint point) const;
     const int &width() const;
     const int &height() const;
     void set(const GridPoint point, std::shared_ptr<T> character);
