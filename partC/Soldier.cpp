@@ -45,7 +45,7 @@ void Soldier::shoot(GameBoard<Character>& board, const mtm::GridPoint& s_place,
 
 void Soldier::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
                      const mtm::GridPoint& d_place) {
-    if (s_place.col > board.width() || s_place.row > board.height()) {
+    if (d_place.col > board.width() || d_place.row > board.height()) {
         throw IllegalCell();
     }
     if (ammo < 1) {

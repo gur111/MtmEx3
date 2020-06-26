@@ -29,11 +29,11 @@ class Character {
     virtual void attack(GameBoard<Character>& board, const GridPoint& s_place,
                         const GridPoint& d_place) = 0;
     virtual void changeHealth(units_t delta);
-    virtual units_t getHealth(units_t delta);
+    virtual units_t getHealth() const;
     virtual void reload() = 0;
     virtual std::shared_ptr<Character> clone() const = 0;
-    CharacterType getType();
-    virtual Team getTeam();
+    CharacterType getType() const;
+    virtual Team getTeam() const;
 };
 }  // namespace mtm
 #endif  // MTMEX3_CHARACTER_H
