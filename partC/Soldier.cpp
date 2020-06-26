@@ -14,7 +14,7 @@ Soldier::Soldier(units_t health, units_t power, Team team, units_t range,
     type = SOLDIER;
 }
 
-void Soldier::move(GameBoard& board, const mtm::GridPoint& s_place,
+void Soldier::move(GameBoard<Character>& board, const mtm::GridPoint& s_place,
                    const mtm::GridPoint& d_place) {
     if (GridPoint::distance(s_place, d_place) >= 3) {
         throw MoveTooFar();
@@ -27,14 +27,14 @@ void Soldier::move(GameBoard& board, const mtm::GridPoint& s_place,
     board(s_place.row, s_place.col) = nullptr;
 }
 
-void Soldier::reload(GameBoard& board, const mtm::GridPoint& s_place) {
+void Soldier::reload(GameBoard<Character>& board, const mtm::GridPoint& s_place) {
     if (s_place.col > board.width() || s_place.row > board.height()) {
         throw IllegalCell();
     }
     ammo += 3;
 }
 
-void Soldier::shoot(GameBoard& board, const mtm::GridPoint& s_place,
+void Soldier::shoot(GameBoard<Character>& board, const mtm::GridPoint& s_place,
                     const mtm::GridPoint& d_place) {
     if (d_place.row == s_place.row && d_place.col == s_place.col) {
         board(d_place.row, d_place.col)->health -= ceil(power / 2);
@@ -46,7 +46,7 @@ void Soldier::shoot(GameBoard& board, const mtm::GridPoint& s_place,
     }
 }
 
-void Soldier::attack(GameBoard& board, const mtm::GridPoint& s_place,
+void Soldier::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
                      const mtm::GridPoint& d_place) {
     if (s_place.col > board.width() || s_place.row > board.height()) {
         throw IllegalCell();

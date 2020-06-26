@@ -12,7 +12,7 @@ Sniper::Sniper(units_t health, units_t power, Team team, units_t range, units_t 
     type = SNIPER;
 }
 
-void Sniper::move(GameBoard& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
+void Sniper::move(GameBoard<Character>& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
     if (GridPoint::distance(s_place, d_place) >= 4) {
         throw MoveTooFar();
     }
@@ -24,14 +24,14 @@ void Sniper::move(GameBoard& board, const mtm::GridPoint& s_place, const mtm::Gr
     board(s_place.row, s_place.col) = nullptr;
 }
 
-void Sniper::reload(GameBoard& board, const mtm::GridPoint& s_place) {
+void Sniper::reload(GameBoard<Character>& board, const mtm::GridPoint& s_place) {
     if (s_place.col > board.width() || s_place.row > board.height()) {
         throw IllegalCell();
     }
     ammo += 2;
 }
 
-void Sniper::shoot(mtm::GameBoard& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
+void Sniper::shoot(mtm::GameBoard<Character>& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
     if (counter % 3 != 0) {
         board(d_place.row, d_place.col)->health -= power;
     } else {
@@ -40,7 +40,7 @@ void Sniper::shoot(mtm::GameBoard& board, const mtm::GridPoint& s_place, const m
     counter++;
 }
 
-void Sniper::attack(GameBoard& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
+void Sniper::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
     if (board(d_place.row, d_place.col) == nullptr) {
         throw IllegalTarget();
     }

@@ -14,10 +14,10 @@ namespace mtm {
     private:
     public:
         Medic(units_t health, units_t power, Team team, units_t range, units_t ammo);
-        ~Medic();
-        void move(GameBoard& board, const GridPoint& s_place, const GridPoint& d_place) override;
-        void attack(GameBoard& board, const GridPoint& s_place, const GridPoint& d_place) override;
-        void reload(GameBoard& board, const GridPoint& s_place) override;
+        ~Medic() = default;
+        void move(GameBoard<Character>& board, const GridPoint& s_place, const GridPoint& d_place) override;
+        void attack(GameBoard<Character>& board, const GridPoint& s_place, const GridPoint& d_place) override;
+        void reload(GameBoard<Character>& board, const GridPoint& s_place) override;
     };
 }
 #endif //MTMEX3_SOLDIER_H
