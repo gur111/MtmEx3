@@ -73,14 +73,20 @@ void Game::reload(const GridPoint& coordinate) {
 bool Game::isOver(Team* winningTeam) const {
     // Pun intended
     bool isPythonDead = true, isCppDead = true;
+    std::shared_ptr<Character> character;
 
-    for (std::shared_ptr<Character> character : *this) {
-        if (character != nullptr) {
-            isCppDead = isCppDead && character->getTeam() != CPP;
-            isPythonDead = isPythonDead && character->getTeam() != PYTHON;
+    for (int i; i < board.height(); i++) {
+        for (int j; j < board.width(); j++) {
+            character = board(i, j);
+            if (character != nullptr) {
+                isCppDead = isCppDead && character->getTeam() != CPP;
+                isPythonDead = isPythonDead && character->getTeam() != PYTHON;
+            }
         }
     }
+
     assert(!isPythonDead || !isCppDead);
+
     if (winningTeam) {
         if (isPythonDead) {
             *winningTeam = CPP;
@@ -91,53 +97,4 @@ bool Game::isOver(Team* winningTeam) const {
     }
     return isPythonDead || isCppDead;
 }
-
-// ITERATORS
-
-// // Constructors
-// Game::const_iterator::const_iterator(const Game* game, int index)
-//     : index(index), game(game) {}
-// Game::iterator::iterator(Game* game, int index) : index(index), game(game) {}
-
-// // Begin/end
-// Game::iterator Game::begin() { return Game::iterator(this, 0); }
-// Game::iterator Game::end() {
-//     return Game::iterator(this, board.height() * board.width());
-// }
-
-// Game::const_iterator Game::begin() const {
-//     return Game::const_iterator(this, 0);
-// }
-// Game::const_iterator Game::end() const {
-//     return Game::const_iterator(this, board.height() * board.width());
-// }
-
-// // Comparisons
-// bool Game::iterator::operator==(const Game::iterator& it) const {
-//     assert(game == it.game);
-//     return it.index == this->index;
-// }
-
-// bool Game::const_iterator::operator==(const Game::const_iterator& it) const {
-//     assert(game == it.game);
-//     return it.index == this->index;
-// }
-
-// bool Game::iterator::operator!=(const Game::iterator& it) const {
-//     return not(*this == it);
-// }
-// bool Game::const_iterator::operator!=(const Game::const_iterator& it) const {
-//     return not(*this == it);
-// }
-
-// // Operator *
-// std::shared_ptr<Character> Game::iterator::operator*() const {
-//     if (index >= game->board.width() * game->board.height()) {
-//         throw IllegalCell();
-//     }
-//     int x = index / game->board.width(), y = index % game->board.width();
-//     GameBoard board = game->board;
-//     return board(3, 1);
-// }
-
 };  // namespace mtm
