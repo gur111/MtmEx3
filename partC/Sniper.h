@@ -1,5 +1,5 @@
-#ifndef MTMEX3_SOLDIER_H
-#define MTMEX3_SOLDIER_H
+#ifndef MTMEX3_SNIPER_H
+#define MTMEX3_SNIPER_H
 
 #include <assert.h>
 #include "Character.h"
@@ -23,4 +23,4 @@ namespace mtm {
         std::shared_ptr<Character> clone() const override;
     };
 }
-#endif //MTMEX3_SOLDIER_H
+#endif //MTMEX3_SNIPER_H
