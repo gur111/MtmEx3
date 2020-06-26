@@ -2,20 +2,42 @@
 
 #include <iostream>
 
+#include "Medic.h"
+#include "Sniper.h"
+#include "Soldier.h"
+
 namespace mtm {
 
 Game::Game(int height, int width)
     : board(*(new GameBoard<Character>(Dimensions(height, width)))) {}
 
-Game::Game(const Game& game)
-    : board(*(new GameBoard<Character>(
-          Dimensions(game.board.height(), game.board.width())))) {
-    for (int i; i < game.board.height(); i++) {
-        for (int j; j < game.board.width(); j++) {
-            GridPoint point(i, j);
-            board.set(point, game.board.get(point)->clone());
+Game::Game(const Game& game) : board(game.cloneBoard()) {}
+
+void Game::copyBoardToBoard(GameBoard<Character>& dest_board,
+                      GameBoard<Character>& src_board) {
+    assert(dest_board.width() == src_board.width() &&
+           dest_board.height() == src_board.height());
+    for (int i; i < dest_board.height(); i++) {
+        for (int j; j < dest_board.width(); j++) {
+            dest_board(i, j) = src_board(i, j)->clone();
         }
     }
+}
+
+GameBoard<Character>& Game::cloneBoard() const {
+    GameBoard<Character>& cloned =
+        *(new GameBoard<Character>(Dimensions(board.height(), board.width())));
+    copyBoardToBoard(cloned, board);
+
+    return cloned;
+}
+
+Game& Game::operator=(const Game& other) {
+    this->board.reshape(Dimensions(other.board.height(), other.board.width()));
+
+    copyBoardToBoard(board, other.board);
+
+    return *this;
 }
 
 Game::~Game() { delete &board; }
@@ -97,4 +119,35 @@ bool Game::isOver(Team* winningTeam) const {
     }
     return isPythonDead || isCppDead;
 }
+
+void Game::addCharacter(const GridPoint& coordinates,
+                        std::shared_ptr<Character> character) {
+    if (character == nullptr) {
+        throw IllegalArgument();
+    }
+    if (board.get(coordinates) != nullptr) {
+        throw CellOccupied();
+    }
+
+    board.set(coordinates, character);
+}
+
+std::shared_ptr<Character> Game::makeCharacter(CharacterType type, Team team,
+                                         units_t health, units_t ammo,
+                                         units_t range, units_t power) {
+    switch (type) {
+        case SOLDIER:
+            return std::shared_ptr<Character>(
+                new Soldier(health, power, team, range, ammo));
+        case MEDIC:
+            return std::shared_ptr<Character>(
+                new Medic(health, power, team, range, ammo));
+        case SNIPER:
+            return std::shared_ptr<Character>(
+                new Sniper(health, power, team, range, ammo));
+        default:
+            throw IllegalArgument();
+    }
+}
+
 };  // namespace mtm

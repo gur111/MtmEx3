@@ -23,7 +23,7 @@ class Character {
    public:
     Character(units_t health, units_t power, Team team, units_t range,
               units_t ammo);
-    virtual ~Character() = 0;
+    virtual ~Character() = default;
     virtual void move(GameBoard<Character>& board, const GridPoint& s_place,
                       const GridPoint& d_place) = 0;
     virtual void attack(GameBoard<Character>& board, const GridPoint& s_place,

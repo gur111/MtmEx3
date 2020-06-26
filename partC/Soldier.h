@@ -15,7 +15,7 @@ namespace mtm {
         void shoot(GameBoard<Character>& board, const GridPoint& s_place, const GridPoint& d_place);
     public:
         Soldier(units_t health, units_t power, Team team, units_t range, units_t ammo);
-        ~Soldier();
+        ~Soldier() = default;
         void move(GameBoard<Character>& board, const GridPoint& s_place, const GridPoint& d_place) override;
         void attack(GameBoard<Character>& board, const GridPoint& s_place, const GridPoint& d_place) override;
         void reload() override;

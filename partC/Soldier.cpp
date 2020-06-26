@@ -73,7 +73,7 @@ void Soldier::attack(GameBoard <Character>& board, const mtm::GridPoint& s_place
     }
 }
 
-std::shared_ptr<mtm::Character> mtm::Soldier::clone() const {
+std::shared_ptr<mtm::Character> Soldier::clone() const {
     return std::shared_ptr<Character>(new Soldier(health, power, team,
                                                   range, ammo));
 }
