@@ -28,6 +28,7 @@ class Character {
                       const GridPoint& d_place) = 0;
     virtual void attack(GameBoard<Character>& board, const GridPoint& s_place,
                         const GridPoint& d_place) = 0;
+    virtual void changeHealth(units_t delta);
     virtual void reload() = 0;
     virtual std::shared_ptr<Character> clone() const = 0;
     CharacterType getType();
