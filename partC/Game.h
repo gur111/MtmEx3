@@ -9,10 +9,11 @@
 
 namespace mtm {
 class Game {
-    GameBoard& board;
+    GameBoard<Character>& board;
 
    private:
     std::shared_ptr<Character> getCharacter(const GridPoint& point);
+    friend std::ostream& operator<<(std::ostream& os, const Game& game);
 
    public:
     // Ctors and Dtor
