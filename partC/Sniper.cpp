@@ -12,11 +12,11 @@ Sniper::Sniper(units_t health, units_t power, Team team, units_t range, units_t 
     type = SNIPER;
 }
 
-void Sniper::move(GameBoard<Character>& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
+void Sniper::move(GameBoard <Character>& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
     if (GridPoint::distance(s_place, d_place) >= 4) {
         throw MoveTooFar();
     }
-    if (!board.isWithinLimits(d_place)){
+    if (!board.isWithinLimits(d_place)) {
         throw IllegalCell();
     }
     if (board(d_place.row, d_place.col) != nullptr) {
@@ -43,7 +43,7 @@ void Sniper::shoot(mtm::GameBoard<Character>& board, const mtm::GridPoint& s_pla
     counter++;
 }
 
-void Sniper::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
+void Sniper::attack(GameBoard <Character>& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
     if (board.isWithinLimits(d_place)) {
         throw IllegalCell();
     }
@@ -57,5 +57,10 @@ void Sniper::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place, 
     if (board(d_place.row, d_place.col)->getTeam() == team) {
         throw IllegalTarget();
     }
-    shoot(board,s_place,d_place);
+    shoot(board, s_place, d_place);
+}
+
+std::shared_ptr<mtm::Character> mtm::Sniper::clone() const {
+    return std::shared_ptr<Character>(new Sniper(health, power, team,
+                                                 range, ammo, counter));
 }

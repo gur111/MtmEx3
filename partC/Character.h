@@ -34,6 +34,7 @@ class Character {
     virtual std::shared_ptr<Character> clone() const = 0;
     CharacterType getType() const;
     virtual Team getTeam() const;
+    Character(const Character& other);
 };
 }  // namespace mtm
 #endif  // MTMEX3_CHARACTER_H

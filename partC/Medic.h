@@ -18,6 +18,7 @@ namespace mtm {
         void move(GameBoard<Character>& board, const GridPoint& s_place, const GridPoint& d_place) override;
         void attack(GameBoard<Character>& board, const GridPoint& s_place, const GridPoint& d_place) override;
         void reload() override;
+        std::shared_ptr<Character> clone() const override;
     };
 }
 #endif //MTMEX3_SOLDIER_H

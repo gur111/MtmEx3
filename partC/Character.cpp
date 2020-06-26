@@ -31,4 +31,8 @@ namespace mtm {
 
     void Character::changeHealth(units_t delta) { health += delta; }
 
+    Character::Character(const Character& other) {
+        (*this) = other;
+    }
+
 }  // namespace mtm
