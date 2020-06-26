@@ -6,9 +6,10 @@
 
 using mtm::Sniper;
 
-Sniper::Sniper(GameBoard matrix, units_t health, units_t power, Team team, units_t range, units_t ammo, int s_counter) :
-        Character(matrix, health, power, team, range, ammo) {
+Sniper::Sniper(units_t health, units_t power, Team team, units_t range, units_t ammo, int s_counter) :
+        Character(health, power, team, range, ammo) {
     counter = s_counter;
+    type = SNIPER;
 }
 
 void Sniper::move(GameBoard& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {

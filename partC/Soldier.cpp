@@ -1,16 +1,21 @@
 #include "Soldier.h"
-#include "Character.h"
-#include <string>
+
 #include <memory>
+#include <string>
+
+#include "Character.h"
 #include "GameException.h"
 
 using mtm::Soldier;
 
-Soldier::Soldier(GameBoard matrix, units_t health, units_t power, Team team, units_t range, units_t ammo) :
-        Character(matrix, health, power, team, range, ammo) {
+Soldier::Soldier(units_t health, units_t power, Team team, units_t range,
+                 units_t ammo)
+    : Character(health, power, team, range, ammo) {
+    type = SOLDIER;
 }
 
-void Soldier::move(GameBoard& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
+void Soldier::move(GameBoard& board, const mtm::GridPoint& s_place,
+                   const mtm::GridPoint& d_place) {
     if (GridPoint::distance(s_place, d_place) >= 3) {
         throw MoveTooFar();
     }
@@ -29,7 +34,8 @@ void Soldier::reload(GameBoard& board, const mtm::GridPoint& s_place) {
     ammo += 3;
 }
 
-void Soldier::shoot(GameBoard& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
+void Soldier::shoot(GameBoard& board, const mtm::GridPoint& s_place,
+                    const mtm::GridPoint& d_place) {
     if (d_place.row == s_place.row && d_place.col == s_place.col) {
         board(d_place.row, d_place.col)->health -= ceil(power / 2);
     } else {
@@ -40,7 +46,8 @@ void Soldier::shoot(GameBoard& board, const mtm::GridPoint& s_place, const mtm::
     }
 }
 
-void Soldier::attack(GameBoard& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
+void Soldier::attack(GameBoard& board, const mtm::GridPoint& s_place,
+                     const mtm::GridPoint& d_place) {
     if (s_place.col > board.width() || s_place.row > board.height()) {
         throw IllegalCell();
     }
@@ -58,10 +65,10 @@ void Soldier::attack(GameBoard& board, const mtm::GridPoint& s_place, const mtm:
     for (point.row; point.row < board.height(); point.row++) {
         for (point.col = 0; point.col < board.width(); point.col++) {
             if (GridPoint::distance(point, d_place) <= ceil(range / 3) &&
-                board(point.row, point.col)->team != team && board(point.row, point.col) != nullptr) {
+                board(point.row, point.col)->team != team &&
+                board(point.row, point.col) != nullptr) {
                 shoot(board, s_place, point);
             }
         }
     }
 }
-

@@ -13,7 +13,7 @@ namespace mtm {
     class Medic : public Character {
     private:
     public:
-        Medic(GameBoard matrix, units_t health, units_t power, Team team, units_t range, units_t ammo);
+        Medic(units_t health, units_t power, Team team, units_t range, units_t ammo);
         ~Medic();
         void move(GameBoard& board, const GridPoint& s_place, const GridPoint& d_place) override;
         void attack(GameBoard& board, const GridPoint& s_place, const GridPoint& d_place) override;

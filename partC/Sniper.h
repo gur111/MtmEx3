@@ -15,7 +15,7 @@ namespace mtm {
         void shoot(GameBoard& board, const GridPoint& s_place, const GridPoint& d_place;
         int counter;
     public:
-        Sniper(GameBoard matrix, units_t health, units_t power, Team team, units_t range, units_t ammo, int counter);
+        Sniper(units_t health, units_t power, Team team, units_t range, units_t ammo, int counter);
         ~Sniper();
         void move(GameBoard& board, const GridPoint& s_place, const GridPoint& d_place) override;
         void attack(GameBoard& board, const GridPoint& s_place, const GridPoint& d_place) override;

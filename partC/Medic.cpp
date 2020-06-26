@@ -1,15 +1,21 @@
 #include "Medic.h"
-#include "Character.h"
-#include <string>
+
 #include <memory>
+#include <string>
+
+#include "Character.h"
 #include "GameException.h"
 
 using mtm::Medic;
 
-Medic::Medic(GameBoard matrix, units_t health, units_t power, Team team, units_t range, units_t ammo) :
-        Character(matrix, health, power, team, range, ammo) {}
+Medic::Medic(units_t health, units_t power, Team team, units_t range,
+             units_t ammo)
+    : Character(health, power, team, range, ammo) {
+    type = MEDIC;
+}
 
-void Medic::move(GameBoard& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
+void Medic::move(GameBoard& board, const mtm::GridPoint& s_place,
+                 const mtm::GridPoint& d_place) {
     if (GridPoint::distance(s_place, d_place) >= 5) {
         throw MoveTooFar();
     }
@@ -28,7 +34,8 @@ void Medic::reload(GameBoard& board, const mtm::GridPoint& s_place) {
     ammo += 5;
 }
 
-void Medic::attack(GameBoard& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
+void Medic::attack(GameBoard& board, const mtm::GridPoint& s_place,
+                   const mtm::GridPoint& d_place) {
     if (board(d_place.row, d_place.col)->team == nullptr) {
         throw IllegalTarget();
     }
