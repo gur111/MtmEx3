@@ -56,7 +56,7 @@ std::shared_ptr<T> GameBoard<T>::operator()(int i, int j) {
 }
 
 template <class T>
-bool GameBoard<T>::isWithinLimit(const GridPoint point) const {
+bool GameBoard<T>::isWithinLimits(const GridPoint point) const {
     return point.col > width() || point.row > height() || point.row < 0 ||
            point.col < 0;
 }
