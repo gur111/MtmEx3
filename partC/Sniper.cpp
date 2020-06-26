@@ -30,9 +30,12 @@ void Sniper::reload() {
 
 void Sniper::shoot(mtm::GameBoard<Character>& board, const mtm::GridPoint& s_place, const mtm::GridPoint& d_place) {
     if (counter % 3 != 0) {
-        board(d_place.row, d_place.col)->health -= power;
+        board(d_place.row, d_place.col)->changeHealth(-power);
     } else {
-        board(d_place.row, d_place.col)->health -= (2 * power);
+        board(d_place.row, d_place.col)->changeHealth(-(2 * power));
+    }
+    if (board(d_place.row, d_place.col)->getHealth() <= 0) {
+        board(d_place.row, d_place.col) = nullptr;
     }
     counter++;
 }

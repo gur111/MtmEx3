@@ -47,15 +47,15 @@ void Medic::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
         throw IllegalTarget();
     }
     if (board(d_place.row, d_place.col)->team == team) {
-        board(d_place.row, d_place.col)->health += power;
+        board(d_place.row, d_place.col)->changeHealth(power);
     } else {
         if (ammo < 1) {
             throw OutOfAmmo();
         }
-        board(d_place.row, d_place.col)->health -= power;
+        board(d_place.row, d_place.col)->changeHealth(-power);
         ammo--;
     }
-    if (board(d_place.row, d_place.col)->health <= 0) {
+    if (board(d_place.row, d_place.col)->getHealth() <= 0) {
         board(d_place.row, d_place.col) = nullptr;
     }
 }

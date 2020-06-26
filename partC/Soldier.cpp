@@ -34,11 +34,11 @@ void Soldier::reload() {
 void Soldier::shoot(GameBoard<Character>& board, const mtm::GridPoint& s_place,
                     const mtm::GridPoint& d_place) {
     if (d_place.row == s_place.row && d_place.col == s_place.col) {
-        board(d_place.row, d_place.col)->health -= ceil(power / 2);
+        board(d_place.row, d_place.col)->changeHealth(-ceil(power / 2));
     } else {
-        board(d_place.row, d_place.col)->health -= power;
+        board(d_place.row, d_place.col)->changeHealth(-power);
     }
-    if (board(d_place.row, d_place.col)->health <= 0) {
+    if (board(d_place.row, d_place.col)->getHealth() <= 0) {
         board(d_place.row, d_place.col) = nullptr;
     }
 }
