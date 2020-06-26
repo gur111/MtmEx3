@@ -11,14 +11,18 @@
 
 namespace mtm {
 
-Character::Character(units_t s_health, units_t s_power, Team s_team,
-                     units_t s_range, units_t s_ammo)
-    : health(s_health),
-      power(s_power),
-      team(s_team),
-      range(s_range),
-      ammo(s_ammo) {}
+    Character::Character(units_t s_health, units_t s_power, Team s_team,
+                         units_t s_range, units_t s_ammo)
+            : health(s_health),
+              power(s_power),
+              team(s_team),
+              range(s_range),
+              ammo(s_ammo) {}
 
-CharacterType Character::getType() { return type; }
+    CharacterType Character::getType() { return type; }
+
+    Team Character::get_team() {
+        return team;
+    }
 
 }  // namespace mtm

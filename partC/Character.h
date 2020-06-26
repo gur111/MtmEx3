@@ -31,6 +31,7 @@ class Character {
     virtual void reload(GameBoard<Character>& board, const GridPoint& s_place) = 0;
     virtual std::shared_ptr<Character> clone() const = 0;
     CharacterType getType();
+    virtual Team get_team();
 };
 }  // namespace mtm
 #endif  // MTMEX3_CHARACTER_H
