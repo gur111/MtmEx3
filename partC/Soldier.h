@@ -18,7 +18,7 @@ namespace mtm {
         ~Soldier();
         void move(GameBoard<Character>& board, const GridPoint& s_place, const GridPoint& d_place) override;
         void attack(GameBoard<Character>& board, const GridPoint& s_place, const GridPoint& d_place) override;
-        void reload(GameBoard<Character>& board, const GridPoint& s_place) override;
+        void reload() override;
     };
 }
 #endif //MTMEX3_SOLDIER_H

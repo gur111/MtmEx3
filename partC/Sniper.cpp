@@ -24,10 +24,7 @@ void Sniper::move(GameBoard<Character>& board, const mtm::GridPoint& s_place, co
     board(s_place.row, s_place.col) = nullptr;
 }
 
-void Sniper::reload(GameBoard<Character>& board, const mtm::GridPoint& s_place) {
-    if (s_place.col > board.width() || s_place.row > board.height()) {
-        throw IllegalCell();
-    }
+void Sniper::reload() {
     ammo += 2;
 }
 

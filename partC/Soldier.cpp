@@ -27,10 +27,7 @@ void Soldier::move(GameBoard<Character>& board, const mtm::GridPoint& s_place,
     board(s_place.row, s_place.col) = nullptr;
 }
 
-void Soldier::reload(GameBoard<Character>& board, const mtm::GridPoint& s_place) {
-    if (s_place.col > board.width() || s_place.row > board.height()) {
-        throw IllegalCell();
-    }
+void Soldier::reload() {
     ammo += 3;
 }
 

@@ -21,7 +21,7 @@ namespace mtm {
 
     CharacterType Character::getType() { return type; }
 
-    Team Character::get_team() {
+    Team Character::getTeam() {
         return team;
     }
 
