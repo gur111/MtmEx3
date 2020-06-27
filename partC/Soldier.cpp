@@ -5,7 +5,10 @@
 
 #include "Character.h"
 #include "GameException.h"
-
+#define ADD_AMMO 3
+#define MAX_RANGE 3
+#define DECREASE_POWER 2
+#define SPLASH_ZONE 3
 using mtm::Soldier;
 
 Soldier::Soldier(units_t health, units_t power, Team team, units_t range,
@@ -16,7 +19,7 @@ Soldier::Soldier(units_t health, units_t power, Team team, units_t range,
 
 void Soldier::move(GameBoard <Character>& board, const mtm::GridPoint& s_place,
                    const mtm::GridPoint& d_place) {
-    if (GridPoint::distance(s_place, d_place) >= 3) {
+    if (GridPoint::distance(s_place, d_place) >= MAX_RANGE) {
         throw MoveTooFar();
     }
     if (board.isWithinLimits(d_place) == false) {
@@ -31,13 +34,13 @@ void Soldier::move(GameBoard <Character>& board, const mtm::GridPoint& s_place,
 }
 
 void Soldier::reload() {
-    ammo += 3;
+    ammo += ADD_AMMO;
 }
 
 void Soldier::shoot(GameBoard <Character>& board, const mtm::GridPoint& s_place,
                     const mtm::GridPoint& d_place) {
     if (d_place.row == s_place.row && d_place.col == s_place.col) {
-        board(d_place.row, d_place.col)->changeHealth(-ceil(power / 2));
+        board(d_place.row, d_place.col)->changeHealth(-ceil(power / DECREASE_POWER));
     } else {
         board(d_place.row, d_place.col)->changeHealth(-power);
     }
@@ -64,7 +67,7 @@ void Soldier::attack(GameBoard <Character>& board, const mtm::GridPoint& s_place
     GridPoint point(0, 0);
     for (point.row; point.row < board.height(); point.row++) {
         for (point.col = 0; point.col < board.width(); point.col++) {
-            if (GridPoint::distance(point, d_place) <= ceil(range / 3) &&
+            if (GridPoint::distance(point, d_place) <= ceil(range / SPLASH_ZONE) &&
                 board(point.row, point.col)->getTeam() != team &&
                 board(point.row, point.col) != nullptr) {
                 shoot(board, s_place, point);

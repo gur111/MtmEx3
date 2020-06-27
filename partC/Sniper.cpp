@@ -5,7 +5,11 @@
 
 #include "Character.h"
 #include "GameException.h"
-
+#define ADD_AMMO 2
+#define MAX_RANGE 4
+#define TIMES_FOR_BOOST 3
+#define INCREASE_RATE 2
+#define MINIMUM_RANGE 2
 using mtm::Sniper;
 
 Sniper::Sniper(units_t health, units_t power, Team team, units_t range,
@@ -17,7 +21,7 @@ Sniper::Sniper(units_t health, units_t power, Team team, units_t range,
 
 void Sniper::move(GameBoard<Character>& board, const mtm::GridPoint& s_place,
                   const mtm::GridPoint& d_place) {
-    if (GridPoint::distance(s_place, d_place) > 4) {
+    if (GridPoint::distance(s_place, d_place) > MAX_RANGE) {
         throw MoveTooFar();
     }
     if (!board.isWithinLimits(d_place)) {
@@ -31,15 +35,15 @@ void Sniper::move(GameBoard<Character>& board, const mtm::GridPoint& s_place,
     board(s_place.row, s_place.col) = nullptr;
 }
 
-void Sniper::reload() { ammo += 2; }
+void Sniper::reload() { ammo += ADD_AMMO; }
 
 void Sniper::shoot(mtm::GameBoard<Character>& board,
                    const mtm::GridPoint& s_place,
                    const mtm::GridPoint& d_place) {
-    if (counter % 3 != 0) {
+    if (counter % TIMES_FOR_BOOST != 0) {
         board(d_place.row, d_place.col)->changeHealth(-power);
     } else {
-        board(d_place.row, d_place.col)->changeHealth(-(2 * power));
+        board(d_place.row, d_place.col)->changeHealth(-(INCREASE_RATE * power));
     }
     if (board(d_place.row, d_place.col)->getHealth() <= 0) {
         board(d_place.row, d_place.col) = nullptr;
@@ -53,7 +57,7 @@ void Sniper::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
         throw IllegalCell();
     }
     if (GridPoint::distance(s_place, d_place) > range ||
-        GridPoint::distance(s_place, d_place) < ceil(range / 2)) {
+        GridPoint::distance(s_place, d_place) < ceil(range / MINIMUM_RANGE)) {
         throw OutOfRange();
     }
     if (ammo < 1) {

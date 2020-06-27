@@ -5,7 +5,8 @@
 
 #include "Character.h"
 #include "GameException.h"
-
+#define ADD_AMMO 5
+#define MAX_RANGE 5
 using mtm::Medic;
 
 Medic::Medic(units_t health, units_t power, Team team, units_t range,
@@ -16,7 +17,7 @@ Medic::Medic(units_t health, units_t power, Team team, units_t range,
 
 void Medic::move(GameBoard<Character>& board, const mtm::GridPoint& s_place,
                  const mtm::GridPoint& d_place) {
-    if (GridPoint::distance(s_place, d_place) >= 5) {
+    if (GridPoint::distance(s_place, d_place) >= MAX_RANGE) {
         throw MoveTooFar();
     }
     if (board(d_place.row, d_place.col) != nullptr) {
@@ -30,7 +31,7 @@ void Medic::move(GameBoard<Character>& board, const mtm::GridPoint& s_place,
     board(s_place.row, s_place.col) = nullptr;
 }
 
-void Medic::reload() { ammo += 5; }
+void Medic::reload() { ammo += ADD_AMMO; }
 
 void Medic::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
                    const mtm::GridPoint& d_place) {
