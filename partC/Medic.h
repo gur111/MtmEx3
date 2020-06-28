@@ -15,7 +15,6 @@ namespace mtm {
     public:
         Medic(units_t health, units_t power, Team team, units_t range, units_t ammo);
         ~Medic() = default;
-        void move(GameBoard<Character>& board, const GridPoint& s_place, const GridPoint& d_place) override;
         void attack(GameBoard<Character>& board, const GridPoint& s_place, const GridPoint& d_place) override;
         void reload() override;
         std::shared_ptr<Character> clone() const override;

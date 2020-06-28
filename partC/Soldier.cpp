@@ -6,7 +6,6 @@
 #include "Character.h"
 #include "Exceptions.h"
 #define ADD_AMMO 3
-#define MAX_RANGE 3
 #define DECREASE_POWER 2
 #define SPLASH_ZONE 3
 
@@ -15,22 +14,7 @@ Soldier::Soldier(units_t health, units_t power, Team team, units_t range,
                  units_t ammo)
     : Character(health, power, team, range, ammo, SOLDIER) {
     type = SOLDIER;
-}
-
-void Soldier::move(GameBoard<Character>& board, const GridPoint& s_place,
-                   const GridPoint& d_place) {
-    if (GridPoint::distance(s_place, d_place) > MAX_RANGE) {
-        throw MoveTooFar();
-    }
-    if (board.isWithinLimits(d_place) == false) {
-        throw IllegalCell();
-    }
-    if (board(d_place.row, d_place.col) != nullptr) {
-        throw CellOccupied();
-    }
-    std::shared_ptr<Character> temp = board(s_place.row, s_place.col);
-    board(d_place.row, d_place.col) = temp;
-    board(s_place.row, s_place.col) = nullptr;
+    speed = 3;
 }
 
 void Soldier::reload() { ammo += ADD_AMMO; }

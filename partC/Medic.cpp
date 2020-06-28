@@ -6,29 +6,13 @@
 #include "Character.h"
 #include "Exceptions.h"
 #define ADD_AMMO 5
-#define MAX_RANGE 5
 using mtm::Medic;
 
 Medic::Medic(units_t health, units_t power, Team team, units_t range,
              units_t ammo)
     : Character(health, power, team, range, ammo, MEDIC) {
     type = MEDIC;
-}
-
-void Medic::move(GameBoard<Character>& board, const mtm::GridPoint& s_place,
-                 const mtm::GridPoint& d_place) {
-    if (GridPoint::distance(s_place, d_place) > MAX_RANGE) {
-        throw MoveTooFar();
-    }
-    if (board(d_place.row, d_place.col) != nullptr) {
-        throw CellOccupied();
-    }
-    if (board.isWithinLimits(d_place) == false) {
-        throw IllegalCell();
-    }
-    std::shared_ptr<Character> temp = board(s_place.row, s_place.col);
-    board(d_place.row, d_place.col) = temp;
-    board(s_place.row, s_place.col) = nullptr;
+    speed = 5;
 }
 
 void Medic::reload() { ammo += ADD_AMMO; }
