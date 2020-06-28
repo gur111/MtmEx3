@@ -66,7 +66,7 @@ const int &GameBoard<T>::width() const {
 
 template <class T>
 std::shared_ptr<T> &GameBoard<T>::getCell(const GridPoint point) {
-    if (point.row >= height() || point.col >= width()) {
+    if (not isWithinLimits(point)) {
         throw IllegalCell();
     }
     return data[point.row][point.col];

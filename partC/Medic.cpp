@@ -17,7 +17,7 @@ Medic::Medic(units_t health, units_t power, Team team, units_t range,
 
 void Medic::move(GameBoard<Character>& board, const mtm::GridPoint& s_place,
                  const mtm::GridPoint& d_place) {
-    if (GridPoint::distance(s_place, d_place) >= MAX_RANGE) {
+    if (GridPoint::distance(s_place, d_place) > MAX_RANGE) {
         throw MoveTooFar();
     }
     if (board(d_place.row, d_place.col) != nullptr) {

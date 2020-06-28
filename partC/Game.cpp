@@ -65,7 +65,7 @@ std::ostream& operator<<(std::ostream& os, const Game& game) {
             }
         }
     }
-    return printGameBoard(os, &str[0], &str[str.length() - 1],
+    return printGameBoard(os, &str[0], &str[0] + str.length(),
                           game.board.width());
 }
 
@@ -100,8 +100,8 @@ bool Game::isOver(Team* winningTeam) const {
     bool isPythonDead = true, isCppDead = true;
     std::shared_ptr<Character> character;
 
-    for (int i; i < board.height(); i++) {
-        for (int j; j < board.width(); j++) {
+    for (int i = 0; i < board.height(); i++) {
+        for (int j = 0; j < board.width(); j++) {
             character = board(i, j);
             if (character != nullptr) {
                 isCppDead = isCppDead && character->getTeam() != CPP;

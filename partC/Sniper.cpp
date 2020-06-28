@@ -40,15 +40,16 @@ void Sniper::reload() { ammo += ADD_AMMO; }
 void Sniper::shoot(mtm::GameBoard<Character>& board,
                    const mtm::GridPoint& s_place,
                    const mtm::GridPoint& d_place) {
-    if (counter % TIMES_FOR_BOOST != 0) {
-        board(d_place.row, d_place.col)->changeHealth(-power);
-    } else {
+    if (++counter == TIMES_FOR_BOOST) {
         board(d_place.row, d_place.col)->changeHealth(-(INCREASE_RATE * power));
+    } else {
+        board(d_place.row, d_place.col)->changeHealth(-power);
     }
     if (board(d_place.row, d_place.col)->getHealth() <= 0) {
         board(d_place.row, d_place.col) = nullptr;
     }
-    counter++;
+    ammo--;
+    counter %= TIMES_FOR_BOOST;
 }
 
 void Sniper::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
@@ -57,10 +58,10 @@ void Sniper::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
         throw IllegalCell();
     }
     if (GridPoint::distance(s_place, d_place) > range ||
-        GridPoint::distance(s_place, d_place) < ceil(range / MINIMUM_RANGE)) {
+        GridPoint::distance(s_place, d_place) < ((range+1) / MINIMUM_RANGE)) {
         throw OutOfRange();
     }
-    if (ammo < 1) {
+    if (ammo <= 0) {
         throw OutOfAmmo();
     }
     if (board(d_place.row, d_place.col) == nullptr ||

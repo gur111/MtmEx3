@@ -7,7 +7,9 @@
 
 namespace mtm {
 
-class GameException : public mtm::Exception {
+class Exception : public std::exception {};
+
+class GameException : public Exception {
    protected:
     std::string error = "A game related error has occurred: ";
 
