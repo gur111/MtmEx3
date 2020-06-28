@@ -4,7 +4,7 @@
 #include <string>
 
 #include "Character.h"
-#include "GameException.h"
+#include "Exceptions.h"
 #define ADD_AMMO 5
 #define MAX_RANGE 5
 using mtm::Medic;

@@ -5,7 +5,7 @@
 #include "../Auxiliaries.h"
 #include "Character.h"
 #include "GameBoard.h"
-#include "GameException.h"
+#include "Exceptions.h"
 
 namespace mtm {
 class Game {

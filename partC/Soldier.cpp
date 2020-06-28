@@ -4,21 +4,21 @@
 #include <string>
 
 #include "Character.h"
-#include "GameException.h"
+#include "Exceptions.h"
 #define ADD_AMMO 3
 #define MAX_RANGE 3
 #define DECREASE_POWER 2
 #define SPLASH_ZONE 3
-using mtm::Soldier;
 
+namespace mtm {
 Soldier::Soldier(units_t health, units_t power, Team team, units_t range,
                  units_t ammo)
     : Character(health, power, team, range, ammo, SOLDIER) {
     type = SOLDIER;
 }
 
-void Soldier::move(GameBoard<Character>& board, const mtm::GridPoint& s_place,
-                   const mtm::GridPoint& d_place) {
+void Soldier::move(GameBoard<Character>& board, const GridPoint& s_place,
+                   const GridPoint& d_place) {
     if (GridPoint::distance(s_place, d_place) > MAX_RANGE) {
         throw MoveTooFar();
     }
@@ -35,9 +35,9 @@ void Soldier::move(GameBoard<Character>& board, const mtm::GridPoint& s_place,
 
 void Soldier::reload() { ammo += ADD_AMMO; }
 
-void Soldier::shoot(GameBoard<Character>& board, const mtm::GridPoint& s_place,
-                    const mtm::GridPoint& d_place) {
-    if (d_place == s_place) {
+void Soldier::shoot(GameBoard<Character>& board, const GridPoint& s_place,
+                    const GridPoint& d_place) {
+    if (GridPoint::distance(s_place, d_place) == 0) {
         board(d_place.row, d_place.col)->changeHealth(-power);
     } else {
         board(d_place.row, d_place.col)
@@ -48,8 +48,8 @@ void Soldier::shoot(GameBoard<Character>& board, const mtm::GridPoint& s_place,
     }
 }
 
-void Soldier::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
-                     const mtm::GridPoint& d_place) {
+void Soldier::attack(GameBoard<Character>& board, const GridPoint& s_place,
+                     const GridPoint& d_place) {
     if (!board.isWithinLimits(d_place)) {
         throw IllegalCell();
     }
@@ -74,7 +74,8 @@ void Soldier::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
     }
 }
 
-std::shared_ptr<mtm::Character> Soldier::clone() const {
+std::shared_ptr<Character> Soldier::clone() const {
     return std::shared_ptr<Character>(
         new Soldier(health, power, team, range, ammo));
 }
+}  // namespace mtm

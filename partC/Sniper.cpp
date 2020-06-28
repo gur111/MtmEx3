@@ -4,7 +4,7 @@
 #include <string>
 
 #include "Character.h"
-#include "GameException.h"
+#include "Exceptions.h"
 #define ADD_AMMO 2
 #define MAX_RANGE 4
 #define TIMES_FOR_BOOST 3

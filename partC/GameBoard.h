@@ -6,7 +6,7 @@
 
 #include "../Auxiliaries.h"
 #include "../partB/Matrix.h"
-#include "GameException.h"
+#include "Exceptions.h"
 
 namespace mtm {
 
