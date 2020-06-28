@@ -3,9 +3,12 @@
 
 #include <iostream>
 #include <string>
-#include "Auxiliaries.h"
+
+#include "../Auxiliaries.h"
 
 namespace mtm {
+// template <typename T>
+// using IntMatrix = Matrix<int>;
 class IntMatrix {
     Dimensions dims;
     int* array;
@@ -44,7 +47,8 @@ class IntMatrix {
     IntMatrix operator!=(int num) const;
     IntMatrix operator==(int num) const;
     IntMatrix operator==(const IntMatrix& matrix) const;
-    friend std::ostream& operator<<(std::ostream& os, const IntMatrix& matrix);
+    friend std::ostream& operator<<(std::ostream& os, const IntMatrix&
+    matrix);
 };
 
 IntMatrix operator+(int scalar, const IntMatrix& matrix_b);
@@ -72,7 +76,7 @@ class IntMatrix::iterator {
    private:
     int index;
     IntMatrix* matrix;
-    
+
     iterator(IntMatrix* matrix, int index);
     friend class IntMatrix;
 
