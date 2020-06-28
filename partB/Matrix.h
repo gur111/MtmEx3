@@ -401,7 +401,7 @@ Matrix<T> Matrix<T>::apply(Functor operation) const {
 }
 
 template <class T>
-class Matrix<T>::AccessIllegalElement : public Exception {
+class Matrix<T>::AccessIllegalElement : public std::exception {
     const std::string error =
         "Mtm matrix error: An attempt to access an illegal element";
 
@@ -410,7 +410,7 @@ class Matrix<T>::AccessIllegalElement : public Exception {
 };
 
 template <class T>
-class Matrix<T>::IllegalInitialization : public Exception {
+class Matrix<T>::IllegalInitialization : public std::exception {
     std::string error = "Mtm matrix error: Illegal initialization values";
 
    public:
@@ -423,7 +423,7 @@ class Matrix<T>::IllegalInitialization : public Exception {
 };
 
 template <class T>
-class Matrix<T>::DimensionMismatch : public Exception {
+class Matrix<T>::DimensionMismatch : public std::exception {
     const std::string error;
 
    public:
