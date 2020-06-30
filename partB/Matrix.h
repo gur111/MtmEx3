@@ -2,9 +2,11 @@
 #define MTMEX3_MATRIX_H
 
 #include <assert.h>
+#include <string.h>
 
 #include <iostream>
 #include <string>
+
 #include "../Auxiliaries.h"
 
 namespace mtm {
@@ -47,20 +49,20 @@ class Matrix {
 
     // Operators
     Matrix& operator=(const Matrix& matrix);
-    Matrix& operator+=(T object);
+    Matrix& operator+=(const T& object);
     Matrix operator-() const;
     Matrix operator-(const Matrix& matrix) const;
     Matrix operator+(const Matrix& matrix) const;
-    Matrix operator+(T object) const;
+    Matrix operator+(const T& object) const;
     Matrix& operator-=(const Matrix& matrix);
     T& operator()(int row, int col);
     const T& operator()(int row, int col) const;
-    Matrix<bool> operator<(T object) const;
-    Matrix<bool> operator>(T object) const;
-    Matrix<bool> operator<=(T object) const;
-    Matrix<bool> operator>=(T object) const;
-    Matrix<bool> operator!=(T object) const;
-    Matrix<bool> operator==(T object) const;
+    Matrix<bool> operator<(const T& object) const;
+    Matrix<bool> operator>(const T& object) const;
+    Matrix<bool> operator<=(const T& object) const;
+    Matrix<bool> operator>=(const T& object) const;
+    Matrix<bool> operator!=(const T& object) const;
+    Matrix<bool> operator==(const T& object) const;
     Matrix operator==(const Matrix& matrix) const;  // todo:why do we need this?
     template <class U>
     friend Matrix<U> operator+(U object, const Matrix<U>& matrix_b);
@@ -69,8 +71,8 @@ class Matrix {
 template <class T>
 class Matrix<T>::const_iterator {
    private:
-    int index;
     const Matrix<T>* matrix;
+    int index;
     const_iterator(const Matrix<T>* matrix, int index);
 
     friend class Matrix<T>;
@@ -88,8 +90,8 @@ class Matrix<T>::const_iterator {
 template <class T>
 class Matrix<T>::iterator {
    private:
-    int index;
     Matrix<T>* matrix;
+    int index;
     iterator(Matrix<T>* matrix, int index);
 
     friend class Matrix;
@@ -115,7 +117,7 @@ template <class T>
 Matrix<T>::Matrix(Dimensions dims, T initial)
     : dims(dims.getRow(), dims.getCol()) {
     if (dims.getCol() <= 0 || dims.getRow() <= 0) {
-        throw IllegalInitialization(dims);
+        throw IllegalInitialization();
     }
 
     array = new T[dims.getRow() * dims.getCol()];
@@ -136,13 +138,17 @@ Matrix<T>& Matrix<T>::operator=(const Matrix& matrix) {
     if (this == &matrix) {
         return *this;
     }
-    iterator it_this = this->begin();
+    this->dims = matrix.dims;
+    T* tmp_array = new T[matrix.size()];
+    int ind_this = 0;
 
     for (const_iterator it_other = matrix.begin();  // todo:iterator
-         it_other != matrix.end(); it_other++, it_this++) {
-        *it_this = *it_other;
+         it_other != matrix.end(); it_other++, ind_this++) {
+        tmp_array[ind_this] = *it_other;
     }
 
+    delete[] array;
+    array = tmp_array;
     return *this;
 }
 
@@ -189,8 +195,10 @@ Matrix<T> Matrix<T>::transpose() const {
     Dimensions transpose_dims(width(), height());
     Matrix transpose_matrix(transpose_dims);
 
-    for (int i = 0; i < transpose_matrix.size(); i++) {
-        transpose_matrix.array[i] = this->array[i];
+    for (int i = 0; i < transpose_matrix.height(); i++) {
+        for (int j = 0; j < transpose_matrix.width(); j++) {
+            transpose_matrix(i, j) = (*this)(j, i);
+        }
     }
     return transpose_matrix;
 }
@@ -235,7 +243,7 @@ Matrix<T> Matrix<T>::operator+(const Matrix& matrix) const {
 }
 
 template <class T>
-Matrix<T> Matrix<T>::operator+(T object) const {
+Matrix<T> Matrix<T>::operator+(const T& object) const {
     Matrix<T> result = *this + Matrix<T>((*this).dims, object);
     return result;
 }
@@ -255,7 +263,7 @@ template <class T>
 Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& matrix) {
     for (int i = 0; i < height(); i++) {
         for (int j = 0; j < width(); j++) {
-            (*this)(i, j) -= matrix(i, j);
+            (*this)(i, j) = (*this)(i, j) - matrix(i, j);
         }
     }
 
@@ -263,10 +271,10 @@ Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& matrix) {
 }
 
 template <class T>
-Matrix<T>& Matrix<T>::operator+=(T object) {
+Matrix<T>& Matrix<T>::operator+=(const T& object) {
     for (int i = 0; i < height(); i++) {
         for (int j = 0; j < width(); j++) {
-            (*this)(i, j) += object;
+            (*this)(i, j) = (*this)(i, j) + object;
         }
     }
     return *this;
@@ -277,7 +285,7 @@ T& Matrix<T>::operator()(int row, int col) {
     if (row < 0 || col < 0 || row >= height() || col >= width()) {
         throw AccessIllegalElement();
     }
-    return array[row * height() + col];
+    return array[row * width() + col];
 }
 
 template <class T>
@@ -285,13 +293,14 @@ const T& Matrix<T>::operator()(int row, int col) const {
     if (row < 0 || col < 0 || row >= height() || col >= width()) {
         throw AccessIllegalElement();
     }
-    return array[row * height() + col];
+    return array[row * width() + col];
 }
 
 template <class T>
-Matrix<bool> Matrix<T>::operator>(T object) const {
+Matrix<bool> Matrix<T>::operator>(const T& object) const {
     Matrix<bool> result(dims);
-    for (iterator it_result = result.begin(), it_this = this->begin();
+    const_iterator it_this = this->begin();
+    for (Matrix<bool>::iterator it_result = result.begin();
          it_this != this->end(); it_this++, it_result++) {
         *it_result = *it_this > object;
     }
@@ -300,7 +309,7 @@ Matrix<bool> Matrix<T>::operator>(T object) const {
 }
 
 template <class T>
-Matrix<bool> Matrix<T>::operator<(T object) const {
+Matrix<bool> Matrix<T>::operator<(const T& object) const {
     Matrix<bool> result(dims);
     const_iterator it_this = this->begin();
 
@@ -313,7 +322,7 @@ Matrix<bool> Matrix<T>::operator<(T object) const {
 }
 
 template <class T>
-Matrix<bool> Matrix<T>::operator>=(T object) const {
+Matrix<bool> Matrix<T>::operator>=(const T& object) const {
     Matrix<bool> ones(dims, true);
     Matrix<bool> result =
         ones - (*this < object);  // todo:will it work on booleans?
@@ -321,7 +330,7 @@ Matrix<bool> Matrix<T>::operator>=(T object) const {
 }
 
 template <class T>
-Matrix<bool> Matrix<T>::operator<=(T object) const {
+Matrix<bool> Matrix<T>::operator<=(const T& object) const {
     Matrix<bool> ones(dims, true);
     Matrix<bool> result =
         ones - (*this > object);  // todo:will it work on booleans?
@@ -329,7 +338,7 @@ Matrix<bool> Matrix<T>::operator<=(T object) const {
 }
 
 template <class T>
-Matrix<bool> Matrix<T>::operator!=(T object) const {
+Matrix<bool> Matrix<T>::operator!=(const T& object) const {
     Matrix<bool> ones(dims, true);
     // Subtraction between booleans is well defined (and is infact XOR)
     Matrix<bool> result = ones - (*this == object);
@@ -337,7 +346,7 @@ Matrix<bool> Matrix<T>::operator!=(T object) const {
 }
 
 template <class T>
-Matrix<bool> Matrix<T>::operator==(T object) const {
+Matrix<bool> Matrix<T>::operator==(const T& object) const {
     Matrix<bool> result(dims);
     Matrix<bool>::iterator it_result = result.begin();
 
@@ -366,7 +375,7 @@ template <class T>
 bool any(const Matrix<T>& matrix) {
     for (typename Matrix<T>::const_iterator it = matrix.begin();
          it != matrix.end(); it++) {
-        if (*it != 0) {
+        if (*it) {
             return true;
         }
     }
@@ -378,7 +387,7 @@ template <class T>
 bool all(const Matrix<T>& matrix) {
     for (typename Matrix<T>::const_iterator it = matrix.begin();
          it != matrix.end(); it++) {
-        if (*it == 0) {
+        if (!*it) {
             return false;
         }
     }
@@ -402,39 +411,38 @@ Matrix<T> Matrix<T>::apply(Functor operation) const {
 
 template <class T>
 class Matrix<T>::AccessIllegalElement : public std::exception {
-    const std::string error =
-        "Mtm matrix error: An attempt to access an illegal element";
-
    public:
-    std::string what() { return error; };
+    const char* what() const noexcept {
+        return "Mtm matrix error: An attempt to access an illegal element";
+    };
 };
 
 template <class T>
 class Matrix<T>::IllegalInitialization : public std::exception {
-    std::string error = "Mtm matrix error: Illegal initialization values";
-
    public:
     IllegalInitialization() = default;
-    IllegalInitialization(Dimensions dim) {
-        error += ". Unknown dimensions: " + dim.toString();
-    }
 
-    std::string what() { return error; };
+    const char* what() const noexcept {
+        return "Mtm matrix error: Illegal initialization values";
+    };
 };
 
 template <class T>
 class Matrix<T>::DimensionMismatch : public std::exception {
-    const std::string error;
+    static const int MAX_ERROR_LENGTH = 100;
+    char error[MAX_ERROR_LENGTH];
 
    public:
-    DimensionMismatch(const Matrix<T>& first, const Matrix<T>& second)
-        : error("Mtm matrix error: Dimensions mismatch: (" +
-                std::to_string(first.height()) + "," +
-                std::to_string(first.width()) + ") (" +
-                std::to_string(second.height()) + "," +
-                std::to_string(second.width()) + ")") {}
-
-    std::string what() { return error; };
+    DimensionMismatch(const Matrix<T>& first, const Matrix<T>& second) {
+        std::string err_str = "Mtm matrix error: Dimension mismatch: (" +
+                              std::to_string(first.height()) + "," +
+                              std::to_string(first.width()) + ") (" +
+                              std::to_string(second.height()) + "," +
+                              std::to_string(second.width()) + ")";
+        const char* err_c_str = (err_str).c_str();
+        strcpy(error, err_c_str);
+    }
+    const char* what() const noexcept { return error; };
 };
 
 template <class T>

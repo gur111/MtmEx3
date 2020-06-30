@@ -294,4 +294,4 @@ std::ostream& operator<<(std::ostream& os, const IntMatrix& matrix) {
 
     return os;
 }
-};  // namespace mtm
+}  // namespace mtm
