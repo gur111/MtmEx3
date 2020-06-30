@@ -166,4 +166,4 @@ std::shared_ptr<Character> Game::makeCharacter(CharacterType type, Team team,
     }
 }
 
-};  // namespace mtm
+}  // namespace mtm

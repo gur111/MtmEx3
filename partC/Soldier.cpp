@@ -9,14 +9,13 @@
 #define ADD_AMMO 3
 #define DECREASE_POWER_FACTOR 2
 #define SPLASH_ZONE_FACTOR 3
+#define DEFAULT_SOLDIER_SPEED 3
 
 namespace mtm {
 Soldier::Soldier(units_t health, units_t power, Team team, units_t range,
                  units_t ammo)
-    : Character(health, power, team, range, ammo, SOLDIER) {
-    type = SOLDIER;
-    speed = 3;
-}
+    : Character(health, power, team, range, ammo, SOLDIER,
+                DEFAULT_SOLDIER_SPEED) {}
 
 void Soldier::reload() { ammo += ADD_AMMO; }
 

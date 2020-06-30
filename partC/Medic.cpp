@@ -6,14 +6,13 @@
 #include "Character.h"
 #include "Exceptions.h"
 #define ADD_AMMO 5
+#define DEFAULT_MEDIC_SPEED 5
+
 using mtm::Medic;
 
 Medic::Medic(units_t health, units_t power, Team team, units_t range,
              units_t ammo)
-    : Character(health, power, team, range, ammo, MEDIC) {
-    type = MEDIC;
-    speed = 5;
-}
+    : Character(health, power, team, range, ammo, MEDIC, DEFAULT_MEDIC_SPEED) {}
 
 void Medic::reload() { ammo += ADD_AMMO; }
 

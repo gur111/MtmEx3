@@ -46,8 +46,8 @@ GameBoard<T>::GameBoard(Dimensions dims)
           verifyDimensions(dims).getRow(),
           std::vector<std::shared_ptr<T>>(verifyDimensions(dims).getCol(),
                                           nullptr)))),
-      height_(dims.getRow()),
-      width_(dims.getCol()) {}
+      width_(dims.getRow()),
+      height_(dims.getCol()) {}
 
 template <class T>
 GameBoard<T>::~GameBoard() {
@@ -99,8 +99,8 @@ void GameBoard<T>::reshape(const Dimensions dims) {
     verifyDimensions(dims);
     data.resize(dims.getRow(),
                 std::vector<std::shared_ptr<T>>(dims.getCol(), nullptr));
-    
-    for (int i = 0; i<std::min(dims.getRow(), height()); i++){
+
+    for (int i = 0; i < std::min(dims.getRow(), height()); i++) {
         data[i].resize(dims.getCol(), nullptr);
     }
 
@@ -108,6 +108,6 @@ void GameBoard<T>::reshape(const Dimensions dims) {
     width_ = dims.getCol();
 }
 
-};  // namespace mtm
+}  // namespace mtm
 
 #endif
