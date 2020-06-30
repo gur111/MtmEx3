@@ -227,6 +227,9 @@ const int& IntMatrix::const_iterator::operator*() const {
 IntMatrix::iterator::iterator(IntMatrix* matrix, int index)
     : matrix(matrix), index(index) {}
 
+IntMatrix::const_iterator::const_iterator(const IntMatrix* matrix, int index)
+    : matrix(matrix), index(index) {}
+
 int& IntMatrix::iterator::operator*() const {
     assert(index >= 0 and index < matrix->size());
     return matrix->array[index];
@@ -243,12 +246,32 @@ IntMatrix::iterator IntMatrix::iterator::operator++(int) {
     return result;
 }
 
+IntMatrix::const_iterator& IntMatrix::const_iterator::operator++() {
+    ++index;
+    return *this;
+}
+
+IntMatrix::const_iterator IntMatrix::const_iterator::operator++(int) {
+    const_iterator result = *this;
+    ++*this;
+    return result;
+}
+
 bool IntMatrix::iterator::operator==(const iterator& another) const {
     assert(matrix == another.matrix);
     return index == another.index;
 }
 
+bool IntMatrix::const_iterator::operator==(const const_iterator& another) const {
+    assert(matrix == another.matrix);
+    return index == another.index;
+}
+
 bool IntMatrix::iterator::operator!=(const iterator& another) const {
+    return not(*this == another);
+}
+
+bool IntMatrix::const_iterator::operator!=(const const_iterator& another) const {
     return not(*this == another);
 }
 
