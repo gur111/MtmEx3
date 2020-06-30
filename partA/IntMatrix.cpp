@@ -23,7 +23,7 @@ IntMatrix::IntMatrix(const IntMatrix& matrix)
     (*this) = matrix;
 }
 
-IntMatrix::~IntMatrix() { delete array; }
+IntMatrix::~IntMatrix() { delete[] array; }
 
 int IntMatrix::height() const { return dims.getRow(); }
 
@@ -111,17 +111,20 @@ IntMatrix& IntMatrix::operator+=(int scalar) {
 }
 
 int& IntMatrix::operator()(int row, int col) {
-    return array[row * height() + col];
+    return array[row * width() + col];
 }
 
 int& IntMatrix::operator()(int row, int col) const {
-    return array[row * height() + col];
+    return array[row * width() + col];
 }
 
 IntMatrix& IntMatrix::operator=(const IntMatrix& matrix) {
     if (this == &matrix) {
         return *this;
     }
+    this->dims = matrix.dims;
+    delete[] array;
+    array = new int[dims.getRow() * dims.getCol()];
     iterator it_this = this->begin();
 
     for (const_iterator it_other = matrix.begin(); it_other != matrix.end();
@@ -225,10 +228,10 @@ const int& IntMatrix::const_iterator::operator*() const {
 }
 
 IntMatrix::iterator::iterator(IntMatrix* matrix, int index)
-    : matrix(matrix), index(index) {}
+    : index(index),matrix(matrix) {}
 
 IntMatrix::const_iterator::const_iterator(const IntMatrix* matrix, int index)
-    : matrix(matrix), index(index) {}
+    : index(index),matrix(matrix) {}
 
 int& IntMatrix::iterator::operator*() const {
     assert(index >= 0 and index < matrix->size());
