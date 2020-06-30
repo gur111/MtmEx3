@@ -14,7 +14,7 @@ class GameException : public Exception {
     std::string error = "A game related error has occurred: ";
 
    public:
-    std::string what() noexcept { return error + typeid(*this).name(); }
+    const char * what() const noexcept { return (error + typeid(*this).name()).c_str(); }
 };
 
 class IllegalArgument : public GameException {};
