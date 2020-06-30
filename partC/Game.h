@@ -47,6 +47,6 @@ class Game {
 
 std::ostream& operator<<(std::ostream& os, const Game& game);
 
-};  // namespace mtm
+}  // namespace mtm
 
 #endif  // MTMEX3_GAME_H

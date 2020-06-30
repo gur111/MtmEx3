@@ -8,4 +8,4 @@ namespace mtm {
 //     return getCell(point);
 // }
 
-};  // namespace mtm
+}  // namespace mtm

@@ -71,6 +71,6 @@ class IllegalTarget : public GameException {
     }
 };
 
-};  // namespace mtm
+}  // namespace mtm
 
 #endif

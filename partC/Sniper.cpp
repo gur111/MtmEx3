@@ -9,14 +9,14 @@
 #define TIMES_FOR_BOOST 3
 #define INCREASE_RATE 2
 #define MINIMUM_RANGE 2
+#define DEFAULT_SNIPER_SPEED 4
 using mtm::Sniper;
 
 Sniper::Sniper(units_t health, units_t power, Team team, units_t range,
                units_t ammo, int s_counter)
-    : Character(health, power, team, range, ammo, SNIPER) {
+    : Character(health, power, team, range, ammo, SNIPER,
+                DEFAULT_SNIPER_SPEED) {
     counter = s_counter;
-    type = SNIPER;
-    speed = 4;
 }
 
 void Sniper::reload() { ammo += ADD_AMMO; }
@@ -42,7 +42,7 @@ void Sniper::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
         throw IllegalCell();
     }
     if (GridPoint::distance(s_place, d_place) > range ||
-        GridPoint::distance(s_place, d_place) < ((range+1) / MINIMUM_RANGE)) {
+        GridPoint::distance(s_place, d_place) < ((range + 1) / MINIMUM_RANGE)) {
         throw OutOfRange();
     }
     if (ammo <= 0) {
