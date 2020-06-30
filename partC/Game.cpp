@@ -14,12 +14,14 @@ Game::Game(int height, int width)
 Game::Game(const Game& game) : board(game.cloneBoard()) {}
 
 void Game::copyBoardToBoard(GameBoard<Character>& dest_board,
-                      GameBoard<Character>& src_board) {
+                            GameBoard<Character>& src_board) {
     assert(dest_board.width() == src_board.width() &&
            dest_board.height() == src_board.height());
-    for (int i; i < dest_board.height(); i++) {
-        for (int j; j < dest_board.width(); j++) {
-            dest_board(i, j) = src_board(i, j)->clone();
+    for (int i = 0; i < dest_board.height(); i++) {
+        for (int j = 0; j < dest_board.width(); j++) {
+            if (src_board(i, j) != nullptr) {
+                dest_board(i, j) = src_board(i, j)->clone();
+            }
         }
     }
 }
@@ -46,7 +48,7 @@ std::ostream& operator<<(std::ostream& os, const Game& game) {
     std::string str = "";
     for (int i = 0; i < game.board.height(); i++) {
         for (int j = 0; j < game.board.width(); j++) {
-            if(game.board(i, j) == nullptr){
+            if (game.board(i, j) == nullptr) {
                 str += " ";
                 continue;
             }
@@ -79,6 +81,13 @@ std::shared_ptr<Character> Game::getCharacter(const GridPoint& point) {
 
 void Game::attack(const GridPoint& src_coordinates,
                   const GridPoint& dst_coordinates) {
+    // So it would first throw an error on the IllegalCell even though it makes
+    // no sense to force order between CellEmpty and IllegalCell. Since we first
+    // of all want to get the Character. CellEmpty (on src) logically should be
+    // thrown before IllegalCell (on dst) since it makes sense in this structure
+    // and make sense in general to verify the soruce and only then the dst.
+    // Anyways, here is the ugly workaround.
+    board.get(dst_coordinates);
     std::shared_ptr<Character> character = getCharacter(src_coordinates);
     character->attack(board, src_coordinates, dst_coordinates);
 }
@@ -110,7 +119,9 @@ bool Game::isOver(Team* winningTeam) const {
         }
     }
 
-    assert(!isPythonDead || !isCppDead);
+    if (isPythonDead == isCppDead) {
+        isPythonDead = isCppDead = false;
+    }
 
     if (winningTeam) {
         if (isPythonDead) {
@@ -136,8 +147,8 @@ void Game::addCharacter(const GridPoint& coordinates,
 }
 
 std::shared_ptr<Character> Game::makeCharacter(CharacterType type, Team team,
-                                         units_t health, units_t ammo,
-                                         units_t range, units_t power) {
+                                               units_t health, units_t ammo,
+                                               units_t range, units_t power) {
     switch (type) {
         case SOLDIER:
             return std::shared_ptr<Character>(
