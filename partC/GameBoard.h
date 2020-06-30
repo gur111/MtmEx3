@@ -27,8 +27,8 @@ class GameBoard {
     const int &width() const;
     const int &height() const;
     void set(const GridPoint point, std::shared_ptr<T> character);
-    std::shared_ptr<T>& get(const GridPoint point);
-    std::shared_ptr<T>& operator()(int i, int j);
+    std::shared_ptr<T> &get(const GridPoint point);
+    std::shared_ptr<T> &operator()(int i, int j);
     // const std::shared_ptr<Character> get(GridPoint point) const;
 };
 
@@ -78,12 +78,12 @@ void GameBoard<T>::set(const GridPoint point, std::shared_ptr<T> character) {
 }
 
 template <class T>
-std::shared_ptr<T>& GameBoard<T>::get(const GridPoint point) {
+std::shared_ptr<T> &GameBoard<T>::get(const GridPoint point) {
     return getCell(point);
 }
 
 template <class T>
-std::shared_ptr<T>& GameBoard<T>::operator()(int i, int j) {
+std::shared_ptr<T> &GameBoard<T>::operator()(int i, int j) {
     return this->getCell(GridPoint(i, j));
 }
 
@@ -99,6 +99,13 @@ void GameBoard<T>::reshape(const Dimensions dims) {
     verifyDimensions(dims);
     data.resize(dims.getRow(),
                 std::vector<std::shared_ptr<T>>(dims.getCol(), nullptr));
+    
+    for (int i = 0; i<std::min(dims.getRow(), height()); i++){
+        data[i].resize(dims.getCol(), nullptr);
+    }
+
+    height_ = dims.getRow();
+    width_ = dims.getCol();
 }
 
 };  // namespace mtm
