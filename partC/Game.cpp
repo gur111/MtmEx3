@@ -48,19 +48,20 @@ std::ostream& operator<<(std::ostream& os, const Game& game) {
     std::string str = "";
     for (int i = 0; i < game.board.height(); i++) {
         for (int j = 0; j < game.board.width(); j++) {
-            if (game.board(i, j) == nullptr) {
+            std::shared_ptr<Character> character = game.board(i, j);
+            if (character == nullptr) {
                 str += " ";
                 continue;
             }
-            switch (game.board(i, j)->getType()) {
+            switch (character->getType()) {
                 case SOLDIER:
-                    str += "S";
+                    str += character->getTeam() == CPP ? "S" : "s";
                     break;
                 case MEDIC:
-                    str += "M";
+                    str += character->getTeam() == CPP ? "M" : "m";
                     break;
                 case SNIPER:
-                    str += "N";
+                    str += character->getTeam() == CPP ? "N" : "n";
                     break;
                 default:
                     assert(false);
@@ -94,6 +95,7 @@ void Game::attack(const GridPoint& src_coordinates,
 
 void Game::move(const GridPoint& src_coordinates,
                 const GridPoint& dst_coordinates) {
+    board.get(dst_coordinates);
     std::shared_ptr<Character> character = getCharacter(src_coordinates);
 
     character->move(board, src_coordinates, dst_coordinates);
