@@ -4,8 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include "../Auxiliaries.h"
-#include "../partB/Matrix.h"
+#include "Auxiliaries.h"
 #include "Exceptions.h"
 
 namespace mtm {

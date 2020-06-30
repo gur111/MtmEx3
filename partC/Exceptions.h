@@ -6,7 +6,7 @@
 
 #define DEFAULT_ERROR_PREFIX "A game related error has occurred: "
 
-#include "../Auxiliaries.h"
+#include "Auxiliaries.h"
 
 namespace mtm {
 

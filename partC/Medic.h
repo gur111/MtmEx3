@@ -3,7 +3,7 @@
 
 #include <assert.h>
 #include "Character.h"
-#include "../Auxiliaries.h"
+#include "Auxiliaries.h"
 #include "GameBoard.h"
 #include <functional>
 #include <iostream>

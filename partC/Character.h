@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 
-#include "../Auxiliaries.h"
+#include "Auxiliaries.h"
 #include "GameBoard.h"
 
 namespace mtm {

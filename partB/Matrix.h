@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 
-#include "../Auxiliaries.h"
+#include "Auxiliaries.h"
 
 namespace mtm {
 

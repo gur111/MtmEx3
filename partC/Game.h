@@ -2,7 +2,7 @@
 #define MTMEX3_GAME_H
 #include <memory>
 
-#include "../Auxiliaries.h"
+#include "Auxiliaries.h"
 #include "Character.h"
 #include "GameBoard.h"
 #include "Exceptions.h"
