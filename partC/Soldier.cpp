@@ -22,7 +22,8 @@ void Soldier::reload() { ammo += ADD_AMMO; }
 
 void Soldier::shoot(GameBoard<Character>& board, const GridPoint& place) {
     board(place.row, place.col)
-        ->changeHealth(-((power + DECREASE_POWER_FACTOR - 1) / DECREASE_POWER_FACTOR));
+        ->changeHealth(
+            -((power + DECREASE_POWER_FACTOR - 1) / DECREASE_POWER_FACTOR));
 
     if (board(place.row, place.col)->getHealth() <= 0) {
         board(place.row, place.col) = nullptr;
@@ -33,21 +34,21 @@ void Soldier::attack(GameBoard<Character>& board, const GridPoint& s_place,
                      const GridPoint& d_place) {
     if (not board.isWithinLimits(d_place)) {
         throw IllegalCell();
-    } else if ((s_place.row != d_place.row && s_place.col != d_place.col) ||
-               GridPoint::distance(s_place, d_place) > range) {
+    } else if (GridPoint::distance(s_place, d_place) > range) {
         throw OutOfRange();
     } else if (ammo < 1) {
         throw OutOfAmmo();
+    } else if (s_place.row != d_place.row && s_place.col != d_place.col) {
+        throw IllegalTarget();
     }
     ammo--;
     GridPoint point(0, 0);
-    const int splash_zone = (this->range + SPLASH_ZONE_FACTOR-1) / SPLASH_ZONE_FACTOR;
+    const int splash_zone =
+        (this->range + SPLASH_ZONE_FACTOR - 1) / SPLASH_ZONE_FACTOR;
     const int min_col = std::max(0, d_place.col - splash_zone);
-    const int max_col =
-        std::min(board.width() - 1, d_place.col + splash_zone);
+    const int max_col = std::min(board.width() - 1, d_place.col + splash_zone);
     for (point.col = min_col; point.col <= max_col; point.col++) {
-        const int row_splash =
-            splash_zone - std::abs(point.col - d_place.col);
+        const int row_splash = splash_zone - std::abs(point.col - d_place.col);
         const int min_row = std::max(0, d_place.row - row_splash);
         const int max_row =
             std::min(board.height() - 1, d_place.row + row_splash);

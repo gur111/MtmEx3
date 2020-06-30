@@ -19,9 +19,9 @@ void Game::copyBoardToBoard(GameBoard<Character>& dest_board,
            dest_board.height() == src_board.height());
     for (int i = 0; i < dest_board.height(); i++) {
         for (int j = 0; j < dest_board.width(); j++) {
-            if (src_board(i, j) != nullptr) {
-                dest_board(i, j) = src_board(i, j)->clone();
-            }
+            std::shared_ptr<Character> src_char = src_board(i, j);
+            dest_board(i, j) =
+                src_char == nullptr ? nullptr : src_char->clone();
         }
     }
 }

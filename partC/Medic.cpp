@@ -22,12 +22,12 @@ void Medic::attack(GameBoard<Character>& board, const mtm::GridPoint& s_place,
     if (!board.isWithinLimits(d_place)) {
         throw IllegalCell();
     }
+    if (GridPoint::distance(d_place, s_place) > range) {
+        throw OutOfRange();
+    }
     if (board(d_place.row, d_place.col) == nullptr ||
         GridPoint::distance(d_place, s_place) == 0) {
         throw IllegalTarget();
-    }
-    if (GridPoint::distance(d_place, s_place) > range) {
-        throw OutOfRange();
     }
     if (board(d_place.row, d_place.col)->getTeam() == team) {
         board(d_place.row, d_place.col)->changeHealth(power);
