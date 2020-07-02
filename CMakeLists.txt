@@ -7,5 +7,16 @@ set(CMAKE_TEST_RELEASE "${CMAKE_TEST_DEBUG} -DNDEBUG")
 
 set(CMAKE_C_FLAGS ${CMAKE_TEST_DEBUG})
 
-add_library(IntMatrix partA/IntMatrix.cpp partA/Auxiliaries.cpp)
-add_executable(Matrix partB/Auxiliaries.cpp partB/test_partB.cpp)
+# add_executable(IntMatrix Auxiliaries.cpp test_partA.cpp)  # Using partB
+# add_executable(IntMatrix partA/IntMatrix.cpp Auxiliaries.cpp test_partA.cpp)
+add_executable(IntMatrix Auxiliaries.cpp partA/IntMatrix.cpp partA_tester.cpp)
+# add_executable(Matrix Auxiliaries.cpp partB_tester.cpp)
+add_executable(CSGO 
+                partC/Game.cpp
+                partC/Character.cpp
+                partC/Sniper.cpp
+                partC/Soldier.cpp
+                partC/Medic.cpp
+                Auxiliaries.cpp 
+                # test_partC.cpp)
+                partC_tester.cpp)
